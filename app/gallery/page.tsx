@@ -14,6 +14,17 @@ const photos = [
   { id: 4, category: "Campus", src: "/images/van2.png" },
   { id: 5, category: "Sports", src: "/images/cycle stan.png" },
   { id: 6, category: "Office", src: "/images/office.jpeg" },
+  { id: 7, category: "Campus", src: "/galery/G1.jpeg" },
+  { id: 8, category: "Events", src: "/galery/G2.jpeg" },
+  { id: 9, category: "Campus", src: "/galery/G3.jpeg" },
+  { id: 10, category: "Sports", src: "/galery/G4.jpeg" },
+  { id: 11, category: "Office", src: "/galery/G5.jpeg" },
+  { id: 12, category: "Campus", src: "/galery/G6.jpeg" },
+  { id: 13, category: "Events", src: "/galery/G7.jpeg" },
+  { id: 14, category: "Campus", src: "/galery/G8.jpeg" },
+  { id: 15, category: "Sports", src: "/galery/G9.jpeg" },
+  { id: 16, category: "Office", src: "/galery/G10.jpeg" },
+  { id: 17, category: "Campus", src: "/galery/G11.jpeg" },
 ];
 
 function GalleryPage() {

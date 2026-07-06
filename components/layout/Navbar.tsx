@@ -56,7 +56,7 @@ function Navbar() {
               </Link>
             ))}
             <Button asChild className="ml-4 bg-primary hover:bg-primary/90 text-white">
-              <Link href="/admission">Apply Now</Link>
+              <Link href="/admission">Admission Now</Link>
             </Button>
           </div>
 
@@ -94,7 +94,7 @@ function Navbar() {
                 </svg>
               </Link>
               <Button asChild className="w-full bg-primary hover:bg-primary/90 text-white">
-                <Link href="/admission" onClick={() => setIsOpen(false)}>Apply Now</Link>
+                <Link href="/admission" onClick={() => setIsOpen(false)}>Admission Now</Link>
               </Button>
             </div>
           </div>

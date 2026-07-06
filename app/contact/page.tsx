@@ -45,7 +45,7 @@ function ContactPage() {
                   </div>
                   <div>
                     <h4 className="font-bold text-gray-900 mb-1">Address</h4>
-                    <p className="text-sm text-gray-600">कोनिका प्रसादी इंग्लिश,<br />अरवल,<br />बिहार 804401</p>
+                    <p className="text-sm text-gray-600">Konika Prasadi English,<br />Arwal,<br />Bihar 804401<br /><br />कोनिका प्रसादी इंग्लिश,<br />अरवल,<br />बिहार 804401</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-4">
@@ -63,7 +63,7 @@ function ContactPage() {
                   </div>
                   <div>
                     <h4 className="font-bold text-gray-900 mb-1">Email</h4>
-                    <p className="text-sm text-gray-600">info@sanskargurukul.com<br />admissions@sanskargurukul.com</p>
+                    <p className="text-sm text-gray-600">kumardipak105@gmail.com</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-4">

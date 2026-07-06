@@ -144,7 +144,7 @@ function AdmissionPage() {
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">Student's Name *</label>
+                  <label className="text-sm font-medium text-gray-700">Student's Name <span className="text-red-500">*</span></label>
                   <input
                     {...register("studentName")}
                     className={`w-full px-4 py-2.5 rounded-lg border focus:ring-2 focus:ring-primary/20 outline-none transition-all ${errors.studentName ? "border-red-500 focus:border-red-500" : "border-gray-200 focus:border-primary"}`}
@@ -154,7 +154,7 @@ function AdmissionPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">Parent/Guardian Name *</label>
+                  <label className="text-sm font-medium text-gray-700">Parent/Guardian Name <span className="text-red-500">*</span></label>
                   <input
                     {...register("parentName")}
                     className={`w-full px-4 py-2.5 rounded-lg border focus:ring-2 focus:ring-primary/20 outline-none transition-all ${errors.parentName ? "border-red-500 focus:border-red-500" : "border-gray-200 focus:border-primary"}`}
@@ -164,7 +164,7 @@ function AdmissionPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">Phone Number *</label>
+                  <label className="text-sm font-medium text-gray-700">Phone Number <span className="text-red-500">*</span></label>
                   <input
                     {...register("phone")}
                     type="tel"
@@ -186,7 +186,7 @@ function AdmissionPage() {
                 </div>
 
                 <div className="space-y-2 md:col-span-2">
-                  <label className="text-sm font-medium text-gray-700">Admission for Class *</label>
+                  <label className="text-sm font-medium text-gray-700">Admission for Class <span className="text-red-500">*</span></label>
                   <select
                     {...register("class")}
                     className={`w-full px-4 py-2.5 rounded-lg border bg-white focus:ring-2 focus:ring-primary/20 outline-none transition-all ${errors.class ? "border-red-500 focus:border-red-500" : "border-gray-200 focus:border-primary"}`}
