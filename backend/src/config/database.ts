@@ -2,7 +2,7 @@ import { MongoClient, ObjectId, Db } from 'mongodb';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const url = process.env.DATABASE_URL || 'mongodb+srv://RFID:fPEh8O63u5XgqHxn@rfidreaderapp.c4fal.mongodb.net/SanskarGurukul';
+const url = process.env.DATABASE_URL || 'mongodb://RFID:fPEh8O63u5XgqHxn@rfidreaderapp-shard-00-00.c4fal.mongodb.net:27017,rfidreaderapp-shard-00-01.c4fal.mongodb.net:27017,rfidreaderapp-shard-00-02.c4fal.mongodb.net:27017/SanskarGurukul?ssl=true&authSource=admin&replicaSet=atlas-unkwii-shard-0';
 const client = new MongoClient(url);
 let dbInstance: Db | null = null;
 
@@ -121,7 +121,7 @@ class CollectionWrapper {
     const coll = await this.getColl();
     const query = this.parseWhere(args?.where);
     let cursor = coll.find(query);
-    
+
     if (args?.orderBy) {
       const sortObj: any = {};
       for (const k of Object.keys(args.orderBy)) {
@@ -129,7 +129,7 @@ class CollectionWrapper {
       }
       cursor = cursor.sort(sortObj);
     }
-    
+
     let docs = await cursor.toArray();
     docs = docs.map(mapDoc);
     if (args?.include) {
@@ -141,10 +141,10 @@ class CollectionWrapper {
   async create(args: any): Promise<any> {
     const coll = await this.getColl();
     const data = { ...args.data };
-    
+
     if (!data.createdAt) data.createdAt = new Date();
     data.updatedAt = new Date();
-    
+
     const relations = ['user', 'payments', 'student', 'attendances', 'inquiries', 'employee', 'assignedEmployee'];
     for (const r of relations) {
       delete data[r];
