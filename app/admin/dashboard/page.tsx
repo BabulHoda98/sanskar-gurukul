@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import { motion } from "framer-motion";
-import { 
-  User, Users, DollarSign, Clock, ShieldAlert, GraduationCap, PlusCircle, 
+import {
+  User, Users, DollarSign, Clock, ShieldAlert, GraduationCap, PlusCircle,
   Search, Download, QrCode, ClipboardList, CheckCircle, ArrowUpRight, LogOut, Loader2, UserPlus, Upload, Calculator, Settings, Edit,
   Phone, Mail, MapPin, FileText, MessageSquare
 } from "lucide-react";
@@ -209,10 +209,10 @@ function AdminDashboard() {
   const fetchPayments = async () => {
     setIsLoading(true);
     try {
-      const url = paymentFilter === "ALL" 
-        ? "/api/admin/payments" 
+      const url = paymentFilter === "ALL"
+        ? "/api/admin/payments"
         : `/api/admin/payments?method=${paymentFilter}`;
-      
+
       const response = await api.get(url, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -455,7 +455,7 @@ function AdminDashboard() {
       });
       const data = response.data;
       toast.success(data.message || `Payment has been successfully ${status === "COMPLETED" ? "approved" : "denied"}.`);
-      
+
       // Trigger WhatsApp notification on payment approval
       if (status === "COMPLETED" && data.payment && data.payment.student) {
         const p = data.payment;
@@ -499,9 +499,9 @@ function AdminDashboard() {
         onLogoutClick={handleLogout}
       />
 
-      <div className="w-full px-4 md:px-6 mt-6">
+      <div className="w-full px-0 mt-0">
         {/* Reusable Navigation Tabs */}
-        <div className="flex flex-wrap gap-2 mb-8 bg-white/80 dark:bg-slate-900/40 p-1.5 border border-slate-200 dark:border-slate-800 rounded-lg">
+        <div className="flex flex-wrap gap-2 mb-2 bg-white/80 dark:bg-slate-900/40 p-1.5 border border-slate-200 dark:border-slate-800 rounded-lg">
           {[
             { id: "students", label: "Student Ledger", icon: Users },
             { id: "inquiries", label: "Admission Inquiries", icon: FileText },
@@ -532,9 +532,26 @@ function AdminDashboard() {
         {/* Dashboard Panels */}
         <main className="bg-slate-900/30 border border-slate-200 dark:border-slate-800/80 rounded-lg p-6 md:p-8 min-h-[500px]">
           {isLoading && (
-            <div className="flex flex-col items-center justify-center py-24">
-              <Loader2 className="w-8 h-8 animate-spin text-amber-500 mb-2" />
-              <p className="text-sm text-slate-500 dark:text-slate-400">Fetching records...</p>
+            <div className="space-y-4 py-4 w-full">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="w-full bg-white/50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800 rounded-lg p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 animate-pulse">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-full bg-slate-200 dark:bg-slate-800 shrink-0"></div>
+                    <div className="space-y-3">
+                      <div className="h-4 bg-slate-200 dark:bg-slate-800 rounded w-48"></div>
+                      <div className="h-3 bg-slate-200 dark:bg-slate-800 rounded w-32"></div>
+                      <div className="flex gap-2 mt-2">
+                        <div className="h-6 w-16 bg-slate-200 dark:bg-slate-800 rounded-full"></div>
+                        <div className="h-6 w-20 bg-slate-200 dark:bg-slate-800 rounded-full"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex gap-3 mt-4 md:mt-0">
+                    <div className="h-9 w-24 bg-slate-200 dark:bg-slate-800 rounded-lg"></div>
+                    <div className="h-9 w-24 bg-slate-200 dark:bg-slate-800 rounded-lg"></div>
+                  </div>
+                </div>
+              ))}
             </div>
           )}
 
@@ -545,8 +562,8 @@ function AdminDashboard() {
                   <h2 className="text-xl font-bold">Admission Inquiry Desk</h2>
                   <p className="text-xs text-slate-500 dark:text-slate-400">Review prospective student inquiries and record details</p>
                 </div>
-                <button 
-                  onClick={fetchInquiries} 
+                <button
+                  onClick={fetchInquiries}
                   className="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:bg-slate-700 text-xs font-semibold rounded-lg border border-slate-300 dark:border-slate-700 cursor-pointer"
                 >
                   Reload Inquiries
@@ -644,8 +661,8 @@ function AdminDashboard() {
           )}
 
           {!isLoading && activeTab === "students" && (
-            <div className="space-y-6">
-              <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 pb-4 border-b border-slate-200 dark:border-slate-800">
+            <div className="space-y-0">
+              <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 pb-4">
                 <div>
                   <h2 className="text-xl font-bold">Student Ledger Registry</h2>
                   <p className="text-xs text-slate-500 dark:text-slate-400">View enrolled students, fee status summaries, and detailed payment history records</p>
@@ -689,8 +706,8 @@ function AdminDashboard() {
               ) : (
                 <div className="space-y-4">
                   {filteredStudents.map((st: any) => (
-                    <div 
-                      key={st.id} 
+                    <div
+                      key={st.id}
                       className="bg-white/80 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800/70 rounded-lg overflow-hidden transition-all"
                     >
                       {/* Top Header Card */}
@@ -786,13 +803,13 @@ function AdminDashboard() {
                           {/* Visual Fee Plan Breakdown */}
                           <div className="space-y-3">
                             <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Fee Registry Breakdown Schedule ({st.paymentCycle})</h4>
-                            
+
                             {st.paymentCycle === "MONTHLY" ? (() => {
                               const monthlyAmt = Math.round(st.totalFees / 12);
                               const fullMonthsPaid = monthlyAmt > 0 ? Math.floor(st.paidFees / monthlyAmt) : 0;
                               const partialAmt = monthlyAmt > 0 ? st.paidFees % monthlyAmt : 0;
                               const months = ["April", "May", "June", "July", "August", "September", "October", "November", "December", "January", "February", "March"];
-                              
+
                               return (
                                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
                                   {months.map((m, idx) => {
@@ -862,27 +879,33 @@ function AdminDashboard() {
                             ) : (
                               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                                 {st.payments.map((p: any) => (
-                                  <div key={p.id} className="flex justify-between items-center bg-slate-900/30 border border-slate-850 p-3.5 rounded-lg hover:border-slate-200 dark:border-slate-800 transition-colors">
+                                  <div key={p.id} className="flex justify-between items-center bg-slate-50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800 p-3.5 rounded-lg hover:border-slate-300 dark:hover:border-slate-700 transition-colors">
                                     <div className="space-y-1">
                                       <div className="flex items-center gap-2">
                                         <span className="text-xs font-bold text-slate-900 dark:text-white">₹{p.amount}</span>
-                                        <span className={`px-2 py-0.5 rounded-full text-[8px] font-bold ${p.paymentMethod === "QR" ? "bg-blue-600/10 text-blue-400 border border-blue-500/10" : p.paymentMethod === "CASH" ? "bg-amber-600/10 text-amber-400 border border-amber-500/10" : "bg-purple-600/10 text-purple-400 border border-purple-500/10"}`}>
+                                        <span className={`px-2 py-0.5 rounded-full text-[8px] font-bold ${p.paymentMethod === "QR" ? "bg-blue-50 dark:bg-blue-600/10 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-500/10" : p.paymentMethod === "CASH" ? "bg-amber-50 dark:bg-amber-600/10 text-amber-600 dark:text-amber-400 border border-amber-200 dark:border-amber-500/10" : "bg-purple-50 dark:bg-purple-600/10 text-purple-600 dark:text-purple-400 border border-purple-200 dark:border-purple-500/10"}`}>
                                           {p.paymentMethod}
                                         </span>
-                                        <span className={`px-1.5 py-0.5 rounded-full text-[8px] font-extrabold ${p.status === "COMPLETED" ? "bg-emerald-600/10 text-emerald-400" : "bg-rose-600/10 text-rose-400"}`}>
+                                        <span className={`px-1.5 py-0.5 rounded-full text-[8px] font-extrabold ${p.status === "COMPLETED" ? "bg-emerald-50 dark:bg-emerald-600/10 text-emerald-600 dark:text-emerald-400" : "bg-rose-50 dark:bg-rose-600/10 text-rose-600 dark:text-rose-400"}`}>
                                           {p.status}
                                         </span>
                                       </div>
-                                      <p className="text-[10px] text-slate-500 dark:text-slate-400">
-                                        Receipt: {p.receiptNumber} | {new Date(p.createdAt).toLocaleString()}
+                                      <p className="text-[10px] mt-1.5">
+                                        <span className="text-slate-500 dark:text-slate-400">Receipt:</span> <span className="font-semibold text-slate-700 dark:text-slate-200">{p.receiptNumber}</span>
+                                        <span className="text-slate-300 dark:text-slate-600 mx-1.5">|</span>
+                                        <span className="text-slate-600 dark:text-slate-400">{new Date(p.createdAt).toLocaleString()}</span>
                                       </p>
-                                      {p.transactionId && <p className="text-[9px] text-slate-500 dark:text-slate-500 font-mono">Ref ID: {p.transactionId}</p>}
+                                      {p.transactionId && (
+                                        <p className="text-[9px] font-mono mt-0.5">
+                                          <span className="text-slate-400 dark:text-slate-500">Ref ID:</span> <span className="font-semibold text-slate-600 dark:text-slate-300">{p.transactionId}</span>
+                                        </p>
+                                      )}
                                     </div>
 
                                     {p.status === "COMPLETED" && (
                                       <button
                                         onClick={() => printReceipt(p.id)}
-                                        className="p-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:bg-slate-700 rounded-lg text-slate-700 dark:text-slate-300 hover:text-white cursor-pointer transition-colors border border-slate-200 dark:border-slate-300 dark:border-slate-700/50"
+                                        className="p-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white cursor-pointer transition-colors border border-slate-200 dark:border-slate-700/50 shadow-sm"
                                         title="Print Invoice"
                                       >
                                         <Download className="w-3.5 h-3.5" />
@@ -933,7 +956,7 @@ function AdminDashboard() {
                     <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Full Name *</label>
                     <input
                       type="text" required name="name"
-                      value={empForm.name} onChange={(e) => setEmpForm({...empForm, name: e.target.value})}
+                      value={empForm.name} onChange={(e) => setEmpForm({ ...empForm, name: e.target.value })}
                       placeholder="Enter full name"
                       className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 focus:border-amber-500 rounded-lg text-slate-900 dark:text-white outline-none text-xs"
                     />
@@ -943,7 +966,7 @@ function AdminDashboard() {
                     <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Email Address *</label>
                     <input
                       type="email" required name="email"
-                      value={empForm.email} onChange={(e) => setEmpForm({...empForm, email: e.target.value})}
+                      value={empForm.email} onChange={(e) => setEmpForm({ ...empForm, email: e.target.value })}
                       placeholder="employee@gurukul.com"
                       className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 focus:border-amber-500 rounded-lg text-slate-900 dark:text-white outline-none text-xs"
                     />
@@ -953,7 +976,7 @@ function AdminDashboard() {
                     <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Password *</label>
                     <input
                       type="password" required name="password"
-                      value={empForm.password} onChange={(e) => setEmpForm({...empForm, password: e.target.value})}
+                      value={empForm.password} onChange={(e) => setEmpForm({ ...empForm, password: e.target.value })}
                       placeholder="Temporary password"
                       className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 focus:border-amber-500 rounded-lg text-slate-900 dark:text-white outline-none text-xs"
                     />
@@ -963,7 +986,7 @@ function AdminDashboard() {
                     <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Mobile Number *</label>
                     <input
                       type="tel" required name="mobile"
-                      value={empForm.mobile} onChange={(e) => setEmpForm({...empForm, mobile: e.target.value})}
+                      value={empForm.mobile} onChange={(e) => setEmpForm({ ...empForm, mobile: e.target.value })}
                       placeholder="10-digit mobile"
                       className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 focus:border-amber-500 rounded-lg text-slate-900 dark:text-white outline-none text-xs"
                     />
@@ -973,7 +996,7 @@ function AdminDashboard() {
                     <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Address *</label>
                     <textarea
                       required name="address" rows={2}
-                      value={empForm.address} onChange={(e) => setEmpForm({...empForm, address: e.target.value})}
+                      value={empForm.address} onChange={(e) => setEmpForm({ ...empForm, address: e.target.value })}
                       placeholder="Full residential address"
                       className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 focus:border-amber-500 rounded-lg text-slate-900 dark:text-white outline-none text-xs resize-none"
                     />
@@ -983,7 +1006,7 @@ function AdminDashboard() {
                     <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Aadhaar Card Number *</label>
                     <input
                       type="text" required name="aadhaarNumber"
-                      value={empForm.aadhaarNumber} onChange={(e) => setEmpForm({...empForm, aadhaarNumber: e.target.value})}
+                      value={empForm.aadhaarNumber} onChange={(e) => setEmpForm({ ...empForm, aadhaarNumber: e.target.value })}
                       placeholder="12-digit Aadhaar number"
                       className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 focus:border-amber-500 rounded-lg text-slate-900 dark:text-white outline-none text-xs"
                     />
@@ -993,7 +1016,7 @@ function AdminDashboard() {
                     <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">PAN Card Number (Optional)</label>
                     <input
                       type="text" name="panCard"
-                      value={empForm.panCard} onChange={(e) => setEmpForm({...empForm, panCard: e.target.value})}
+                      value={empForm.panCard} onChange={(e) => setEmpForm({ ...empForm, panCard: e.target.value })}
                       placeholder="10-digit PAN"
                       className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 focus:border-amber-500 rounded-lg text-slate-900 dark:text-white outline-none text-xs"
                     />
@@ -1183,12 +1206,12 @@ function AdminDashboard() {
                             </td>
                             <td className="py-2.5 font-bold text-slate-900 dark:text-white">₹{p.amount}</td>
                             <td className="py-2.5">
-                              <span className={`px-2 py-0.5 rounded-full text-[8px] font-bold ${p.paymentMethod === "QR" ? "bg-blue-600/10 text-blue-400" : p.paymentMethod === "CASH" ? "bg-amber-600/10 text-amber-400" : "bg-purple-600/10 text-purple-400"}`}>
+                              <span className={`px-2 py-0.5 rounded-full text-[8px] font-bold ${p.paymentMethod === "QR" ? "bg-blue-50 dark:bg-blue-600/10 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-transparent" : p.paymentMethod === "CASH" ? "bg-amber-50 dark:bg-amber-600/10 text-amber-600 dark:text-amber-400 border border-amber-200 dark:border-transparent" : "bg-purple-50 dark:bg-purple-600/10 text-purple-600 dark:text-purple-400 border border-purple-200 dark:border-transparent"}`}>
                                 {p.paymentMethod}
                               </span>
                             </td>
                             <td className="py-2.5">
-                              <span className={`px-2 py-0.5 rounded-full text-[8px] font-bold ${p.status === "COMPLETED" ? "bg-emerald-600/10 text-emerald-400" : p.status === "PENDING" ? "bg-yellow-600/10 text-yellow-400 animate-pulse" : "bg-rose-600/10 text-rose-400"}`}>
+                              <span className={`px-2 py-0.5 rounded-full text-[8px] font-bold ${p.status === "COMPLETED" ? "bg-emerald-50 dark:bg-emerald-600/10 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-transparent" : p.status === "PENDING" ? "bg-yellow-50 dark:bg-yellow-600/10 text-yellow-600 dark:text-yellow-400 border border-yellow-200 dark:border-transparent animate-pulse" : "bg-rose-50 dark:bg-rose-600/10 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-transparent"}`}>
                                 {p.status}
                               </span>
                             </td>

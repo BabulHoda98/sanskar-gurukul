@@ -344,15 +344,15 @@ Thank you for choosing Gurukul!`;
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-slate-100">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col items-center justify-center text-slate-900 dark:text-slate-100">
         <Loader2 className="w-8 h-8 animate-spin text-amber-500 mb-2" />
-        <p className="text-sm text-slate-400">Loading enrollment console...</p>
+        <p className="text-sm text-slate-500 dark:text-slate-400">Loading enrollment console...</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 pb-20 relative overflow-x-hidden">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 pb-20 relative overflow-x-hidden">
       
       {/* Reusable Console Header */}
       <DashboardHeader
@@ -363,52 +363,52 @@ Thank you for choosing Gurukul!`;
         themeColor="amber"
       />
 
-      <div className="max-w-6xl mx-auto px-6 md:px-12 mt-10">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="w-full mx-auto px-0 mt-0">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-2">
           
           {/* Main Form Fields */}
           <div className="lg:col-span-2 space-y-6">
             <motion.div
-              className="bg-slate-900/40 border border-slate-800 rounded-3xl p-6 md:p-8"
+              className="bg-white dark:bg-slate-900/40 border-y md:border border-slate-200 dark:border-slate-800 rounded-lg p-6 md:p-8"
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
             >
               <h2 className="text-xl font-bold mb-1">New Student Enrollment Form</h2>
-              <p className="text-xs text-slate-400 mb-6">Complete both sections to initialize a new student record and generate their fee schedule.</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mb-6">Complete both sections to initialize a new student record and generate their fee schedule.</p>
 
               <form onSubmit={handleSubmit} className="space-y-8">
                 {/* Part 1: Student Data */}
                 <div className="space-y-4">
-                  <h3 className="text-sm font-bold text-amber-400 flex items-center gap-2 border-b border-slate-800 pb-2">
+                  <h3 className="text-sm font-bold text-amber-400 flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-2">
                     <User className="w-4 h-4" /> 1. Student Personal Details
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-1.5">
-                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Student Full Name *</label>
+                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Student Full Name *</label>
                       <input
                         type="text" required name="studentName"
                         value={studentForm.studentName} onChange={handleInputChange}
                         placeholder="Enter full name"
-                        className="w-full px-4 py-2.5 bg-slate-950/50 border border-slate-800 focus:border-amber-500 rounded-xl text-white outline-none text-xs"
+                        className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 focus:border-amber-500 rounded-xl text-slate-900 dark:text-white outline-none text-xs"
                       />
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Aadhaar Card Number *</label>
+                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Aadhaar Card Number *</label>
                       <input
                         type="text" required name="studentAadhaar" maxLength={12}
                         value={studentForm.studentAadhaar} onChange={handleInputChange}
                         placeholder="12-digit Aadhaar"
-                        className="w-full px-4 py-2.5 bg-slate-950/50 border border-slate-800 focus:border-amber-500 rounded-xl text-white outline-none text-xs"
+                        className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 focus:border-amber-500 rounded-xl text-slate-900 dark:text-white outline-none text-xs"
                       />
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Gender *</label>
+                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Gender *</label>
                       <select
                         required name="gender"
                         value={studentForm.gender} onChange={handleInputChange}
-                        className="w-full px-4 py-2.5 bg-slate-950/50 border border-slate-800 focus:border-amber-500 rounded-xl text-white outline-none text-xs"
+                        className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 focus:border-amber-500 rounded-xl text-slate-900 dark:text-white outline-none text-xs"
                       >
                         <option value="">Select Gender</option>
                         <option value="MALE">Male</option>
@@ -418,20 +418,20 @@ Thank you for choosing Gurukul!`;
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Date of Birth *</label>
+                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Date of Birth *</label>
                       <input
                         type="date" required name="studentDob"
                         value={studentForm.studentDob} onChange={handleInputChange}
-                        className="w-full px-4 py-2.5 bg-slate-950/50 border border-slate-800 focus:border-amber-500 rounded-xl text-white outline-none text-xs text-slate-300"
+                        className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 focus:border-amber-500 rounded-xl text-slate-900 dark:text-white outline-none text-xs text-slate-700 dark:text-slate-300"
                       />
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Blood Group</label>
+                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Blood Group</label>
                       <select
                         name="bloodGroup"
                         value={studentForm.bloodGroup} onChange={handleInputChange}
-                        className="w-full px-4 py-2.5 bg-slate-950/50 border border-slate-800 focus:border-amber-500 rounded-xl text-white outline-none text-xs"
+                        className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 focus:border-amber-500 rounded-xl text-slate-900 dark:text-white outline-none text-xs"
                       >
                         <option value="">Select Blood Group</option>
                         <option value="A+">A+</option>
@@ -446,20 +446,20 @@ Thank you for choosing Gurukul!`;
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Student Photo</label>
+                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Student Photo</label>
                       <input
                         type="file" accept="image/*"
                         onChange={(e) => { if (e.target.files) setStudentPhoto(e.target.files[0]); }}
-                        className="w-full text-xs text-slate-400 file:mr-3 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-[10px] file:font-bold file:uppercase file:tracking-wider file:bg-slate-800 file:text-slate-200 file:cursor-pointer"
+                        className="w-full text-xs text-slate-500 dark:text-slate-400 file:mr-3 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-[10px] file:font-bold file:uppercase file:tracking-wider file:bg-slate-100 dark:bg-slate-800 file:text-slate-800 dark:text-slate-200 file:cursor-pointer"
                       />
                     </div>
 
                     <div className="space-y-1.5 md:col-span-2">
-                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Admission for Class *</label>
+                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Admission for Class *</label>
                       <select
                         required name="selectedClass"
                         value={studentForm.selectedClass} onChange={handleInputChange}
-                        className="w-full px-4 py-2.5 bg-slate-950/50 border border-slate-800 focus:border-amber-500 rounded-xl text-white outline-none text-xs"
+                        className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 focus:border-amber-500 rounded-xl text-slate-900 dark:text-white outline-none text-xs"
                       >
                         <option value="">Select Class level</option>
                         {Object.keys(feesConfig.classes).map((cls) => (
@@ -471,26 +471,26 @@ Thank you for choosing Gurukul!`;
                     </div>
 
                     <div className="space-y-1.5 md:col-span-2">
-                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Billing Plan Frequency *</label>
+                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Billing Plan Frequency *</label>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <label className={`flex items-center gap-3 px-4 py-3 bg-slate-950/40 border rounded-xl cursor-pointer transition-all ${studentForm.paymentCycle === "ANNUAL" ? "border-amber-500 bg-amber-500/5 text-amber-400" : "border-slate-800 hover:border-slate-700 text-slate-300"}`}>
+                        <label className={`flex items-center gap-3 px-4 py-3 bg-slate-50 dark:bg-slate-950/40 border rounded-xl cursor-pointer transition-all ${studentForm.paymentCycle === "ANNUAL" ? "border-amber-500 bg-amber-500/5 text-amber-400" : "border-slate-200 dark:border-slate-800 hover:border-slate-700 text-slate-700 dark:text-slate-300"}`}>
                           <input
                             type="radio" name="paymentCycle" value="ANNUAL"
                             checked={studentForm.paymentCycle === "ANNUAL"}
                             onChange={handleInputChange}
-                            className="text-amber-500 focus:ring-amber-500 h-4 w-4 bg-slate-900 border-slate-800 cursor-pointer"
+                            className="text-amber-500 focus:ring-amber-500 h-4 w-4 bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 cursor-pointer"
                           />
                           <div className="text-xs">
                             <p className="font-bold">Annual Plan</p>
                             <p className="text-[10px] text-slate-500">Pay full academic fees upfront</p>
                           </div>
                         </label>
-                        <label className={`flex items-center gap-3 px-4 py-3 bg-slate-950/40 border rounded-xl cursor-pointer transition-all ${studentForm.paymentCycle === "MONTHLY" ? "border-amber-500 bg-amber-500/5 text-amber-400" : "border-slate-800 hover:border-slate-700 text-slate-300"}`}>
+                        <label className={`flex items-center gap-3 px-4 py-3 bg-slate-50 dark:bg-slate-950/40 border rounded-xl cursor-pointer transition-all ${studentForm.paymentCycle === "MONTHLY" ? "border-amber-500 bg-amber-500/5 text-amber-400" : "border-slate-200 dark:border-slate-800 hover:border-slate-700 text-slate-700 dark:text-slate-300"}`}>
                           <input
                             type="radio" name="paymentCycle" value="MONTHLY"
                             checked={studentForm.paymentCycle === "MONTHLY"}
                             onChange={handleInputChange}
-                            className="text-amber-500 focus:ring-amber-500 h-4 w-4 bg-slate-900 border-slate-800 cursor-pointer"
+                            className="text-amber-500 focus:ring-amber-500 h-4 w-4 bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 cursor-pointer"
                           />
                           <div className="text-xs">
                             <p className="font-bold">Monthly Installment Plan</p>
@@ -504,87 +504,87 @@ Thank you for choosing Gurukul!`;
 
                 {/* Part 2: Parent Data */}
                 <div className="space-y-4">
-                  <h3 className="text-sm font-bold text-amber-400 flex items-center gap-2 border-b border-slate-800 pb-2">
+                  <h3 className="text-sm font-bold text-amber-400 flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-2">
                     <Building className="w-4 h-4" /> 2. Parent / Guardian Details
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-1.5">
-                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Parent/Guardian Name *</label>
+                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Parent/Guardian Name *</label>
                       <input
                         type="text" required name="parentName"
                         value={studentForm.parentName} onChange={handleInputChange}
                         placeholder="Parent full name"
-                        className="w-full px-4 py-2.5 bg-slate-950/50 border border-slate-800 focus:border-amber-500 rounded-xl text-white outline-none text-xs"
+                        className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 focus:border-amber-500 rounded-xl text-slate-900 dark:text-white outline-none text-xs"
                       />
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Business / Occupation *</label>
+                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Business / Occupation *</label>
                       <input
                         type="text" required name="parentBusiness"
                         value={studentForm.parentBusiness} onChange={handleInputChange}
                         placeholder="e.g. Business Owner, Teacher"
-                        className="w-full px-4 py-2.5 bg-slate-950/50 border border-slate-800 focus:border-amber-500 rounded-xl text-white outline-none text-xs"
+                        className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 focus:border-amber-500 rounded-xl text-slate-900 dark:text-white outline-none text-xs"
                       />
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Parent WhatsApp Mobile *</label>
+                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Parent WhatsApp Mobile *</label>
                       <input
                         type="tel" required name="parentPhone"
                         value={studentForm.parentPhone} onChange={handleInputChange}
                         placeholder="WhatsApp contact (e.g. 9876543210)"
-                        className="w-full px-4 py-2.5 bg-slate-950/50 border border-slate-800 focus:border-amber-500 rounded-xl text-white outline-none text-xs"
+                        className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 focus:border-amber-500 rounded-xl text-slate-900 dark:text-white outline-none text-xs"
                       />
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Parent Alternate Phone Number</label>
+                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Parent Alternate Phone Number</label>
                       <input
                         type="tel" name="parentAlternatePhone"
                         value={studentForm.parentAlternatePhone} onChange={handleInputChange}
                         placeholder="Alternate contact number"
-                        className="w-full px-4 py-2.5 bg-slate-950/50 border border-slate-800 focus:border-amber-500 rounded-xl text-white outline-none text-xs"
+                        className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 focus:border-amber-500 rounded-xl text-slate-900 dark:text-white outline-none text-xs"
                       />
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Father's Aadhaar Card Number</label>
+                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Father's Aadhaar Card Number</label>
                       <input
                         type="text" name="fatherAadhar" maxLength={12}
                         value={studentForm.fatherAadhar} onChange={handleInputChange}
                         placeholder="12-digit Aadhaar"
-                        className="w-full px-4 py-2.5 bg-slate-950/50 border border-slate-800 focus:border-amber-500 rounded-xl text-white outline-none text-xs"
+                        className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 focus:border-amber-500 rounded-xl text-slate-900 dark:text-white outline-none text-xs"
                       />
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Mother's Aadhaar Card Number</label>
+                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Mother's Aadhaar Card Number</label>
                       <input
                         type="text" name="motherAadhar" maxLength={12}
                         value={studentForm.motherAadhar} onChange={handleInputChange}
                         placeholder="12-digit Aadhaar"
-                        className="w-full px-4 py-2.5 bg-slate-950/50 border border-slate-800 focus:border-amber-500 rounded-xl text-white outline-none text-xs"
+                        className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 focus:border-amber-500 rounded-xl text-slate-900 dark:text-white outline-none text-xs"
                       />
                     </div>
 
                     <div className="space-y-1.5 md:col-span-2">
-                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Parent Email Address (Optional)</label>
+                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Parent Email Address (Optional)</label>
                       <input
                         type="email" name="parentEmail"
                         value={studentForm.parentEmail} onChange={handleInputChange}
                         placeholder="parent@example.com"
-                        className="w-full px-4 py-2.5 bg-slate-950/50 border border-slate-800 focus:border-amber-500 rounded-xl text-white outline-none text-xs"
+                        className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 focus:border-amber-500 rounded-xl text-slate-900 dark:text-white outline-none text-xs"
                       />
                     </div>
 
                     <div className="space-y-1.5 md:col-span-2">
-                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Residential Address *</label>
+                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Residential Address *</label>
                       <textarea
                         required name="parentAddress" rows={3}
                         value={studentForm.parentAddress} onChange={handleInputChange}
                         placeholder="Full home/office address details"
-                        className="w-full px-4 py-2.5 bg-slate-950/50 border border-slate-800 focus:border-amber-500 rounded-xl text-white outline-none text-xs resize-none"
+                        className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 focus:border-amber-500 rounded-xl text-slate-900 dark:text-white outline-none text-xs resize-none"
                       />
                     </div>
                   </div>
@@ -607,24 +607,24 @@ Thank you for choosing Gurukul!`;
           <div className="lg:col-span-1 space-y-6">
             
             {/* 1. Live Calculator */}
-            <div className="bg-slate-900/50 border border-slate-800 rounded-3xl p-6 space-y-5">
-              <h3 className="font-bold text-sm text-slate-200 flex items-center gap-2">
+            <div className="bg-white dark:bg-slate-900/50 border-y md:border border-slate-200 dark:border-slate-800 rounded-lg p-6 space-y-5">
+              <h3 className="font-bold text-sm text-slate-800 dark:text-slate-200 flex items-center gap-2">
                 <Calculator className="w-4 h-4 text-amber-500" /> Fees Live Calculator
               </h3>
               
               <div className="space-y-4">
                 {/* Checkboxes */}
-                <div className="bg-slate-950/50 border border-slate-850 p-4 rounded-2xl space-y-3">
-                  <p className="text-[10px] font-bold uppercase text-slate-400 tracking-wide mb-1">Optional Facilities / Add-ons</p>
+                <div className="bg-slate-50 dark:bg-slate-950/50 border border-slate-100 dark:border-slate-850 p-4 rounded-2xl space-y-3">
+                  <p className="text-[10px] font-bold uppercase text-slate-500 dark:text-slate-400 tracking-wide mb-1">Optional Facilities / Add-ons</p>
                   
                   <label className="flex items-center gap-3 cursor-pointer group">
                     <input
                       type="checkbox" name="transport"
                       checked={services.transport} onChange={handleCheckboxChange}
-                      className="w-4 h-4 rounded text-amber-500 focus:ring-amber-500 bg-slate-900 border-slate-800"
+                      className="w-4 h-4 rounded text-amber-500 focus:ring-amber-500 bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800"
                     />
                     <div className="text-xs">
-                      <p className="font-semibold text-slate-200 group-hover:text-amber-400 transition-colors">Transport Service</p>
+                      <p className="font-semibold text-slate-800 dark:text-slate-200 group-hover:text-amber-400 transition-colors">Transport Service</p>
                       <p className="text-[10px] text-slate-500">+₹{feesConfig.addons.transport} / annum</p>
                     </div>
                   </label>
@@ -633,10 +633,10 @@ Thank you for choosing Gurukul!`;
                     <input
                       type="checkbox" name="dress"
                       checked={services.dress} onChange={handleCheckboxChange}
-                      className="w-4 h-4 rounded text-amber-500 focus:ring-amber-500 bg-slate-900 border-slate-800"
+                      className="w-4 h-4 rounded text-amber-500 focus:ring-amber-500 bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800"
                     />
                     <div className="text-xs">
-                      <p className="font-semibold text-slate-200 group-hover:text-amber-400 transition-colors">School Dress / Uniform</p>
+                      <p className="font-semibold text-slate-800 dark:text-slate-200 group-hover:text-amber-400 transition-colors">School Dress / Uniform</p>
                       <p className="text-[10px] text-slate-500">+₹{feesConfig.addons.dress} / set</p>
                     </div>
                   </label>
@@ -645,43 +645,43 @@ Thank you for choosing Gurukul!`;
                     <input
                       type="checkbox" name="books"
                       checked={services.books} onChange={handleCheckboxChange}
-                      className="w-4 h-4 rounded text-amber-500 focus:ring-amber-500 bg-slate-900 border-slate-800"
+                      className="w-4 h-4 rounded text-amber-500 focus:ring-amber-500 bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800"
                     />
                     <div className="text-xs">
-                      <p className="font-semibold text-slate-200 group-hover:text-amber-400 transition-colors">Books & Study Materials</p>
+                      <p className="font-semibold text-slate-800 dark:text-slate-200 group-hover:text-amber-400 transition-colors">Books & Study Materials</p>
                       <p className="text-[10px] text-slate-500">+₹{feesConfig.addons.books} / year</p>
                     </div>
                   </label>
                 </div>
 
                 {/* Calculation Breakdown */}
-                <div className="space-y-2.5 pt-2 border-t border-slate-850">
-                  <div className="flex justify-between text-xs text-slate-400">
+                <div className="space-y-2.5 pt-2 border-t border-slate-100 dark:border-slate-850">
+                  <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400">
                     <span>Base Tuition Fee:</span>
-                    <span className="font-mono font-bold text-slate-200">
+                    <span className="font-mono font-bold text-slate-800 dark:text-slate-200">
                       ₹{classFee} / yr (approx. ₹{Math.round(classFee / 12)} / mo)
                     </span>
                   </div>
                   {services.transport && (
-                    <div className="flex justify-between text-xs text-slate-400">
+                    <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400">
                       <span>Transport Service:</span>
-                      <span className="font-mono font-bold text-slate-200">₹{feesConfig.addons.transport}</span>
+                      <span className="font-mono font-bold text-slate-800 dark:text-slate-200">₹{feesConfig.addons.transport}</span>
                     </div>
                   )}
                   {services.dress && (
-                    <div className="flex justify-between text-xs text-slate-400">
+                    <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400">
                       <span>School Uniform:</span>
-                      <span className="font-mono font-bold text-slate-200">₹{feesConfig.addons.dress}</span>
+                      <span className="font-mono font-bold text-slate-800 dark:text-slate-200">₹{feesConfig.addons.dress}</span>
                     </div>
                   )}
                   {services.books && (
-                    <div className="flex justify-between text-xs text-slate-400">
+                    <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400">
                       <span>Books & Kit:</span>
-                      <span className="font-mono font-bold text-slate-200">₹{feesConfig.addons.books}</span>
+                      <span className="font-mono font-bold text-slate-800 dark:text-slate-200">₹{feesConfig.addons.books}</span>
                     </div>
                   )}
                   
-                  <div className="flex justify-between items-center text-sm font-bold text-white pt-3 border-t border-dashed border-slate-800">
+                  <div className="flex justify-between items-center text-sm font-bold text-white pt-3 border-t border-dashed border-slate-200 dark:border-slate-800">
                     <span className="text-amber-400 uppercase tracking-wider text-xs">Total Academic Fee:</span>
                     <span className="text-lg text-emerald-400 font-mono">
                       ₹{totalFees} / yr (approx. ₹{Math.round(totalFees / 12)} / mo)
@@ -692,7 +692,7 @@ Thank you for choosing Gurukul!`;
             </div>
 
             {/* Helper Info */}
-            <div className="bg-slate-900/30 border border-slate-800/80 rounded-3xl p-5 text-xs text-slate-400 flex gap-3">
+            <div className="bg-white dark:bg-slate-900/30 border-y md:border border-slate-200 dark:border-slate-800/80 rounded-lg p-5 text-xs text-slate-500 dark:text-slate-400 flex gap-3">
               <Info className="w-5 h-5 text-slate-500 shrink-0 mt-0.5" />
               <p>The total fee balance is automatically debited to the student's ledger. Payments can be accepted via UPI QR code or recorded manually from the operator console.</p>
             </div>
@@ -704,9 +704,9 @@ Thank you for choosing Gurukul!`;
       {/* Post-Admission Payment Selection Modal */}
       <AnimatePresence>
         {showPaymentModal && enrolledStudent && (
-          <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-md flex items-center justify-center z-50 p-4">
+          <div className="fixed inset-0 bg-slate-900/40 dark:bg-slate-950/80 backdrop-blur-md flex items-center justify-center z-50 p-4">
             <motion.div 
-              className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 w-full max-w-lg shadow-2xl relative"
+              className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 md:p-8 w-full max-w-lg shadow-2xl relative"
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
@@ -714,7 +714,7 @@ Thank you for choosing Gurukul!`;
               
               <button 
                 onClick={() => setShowPaymentModal(false)}
-                className="absolute top-4 right-4 p-2 bg-slate-850 hover:bg-slate-800 rounded-full cursor-pointer text-slate-400 hover:text-white transition-all"
+                className="absolute top-4 right-4 p-2 bg-slate-200 dark:bg-slate-850 hover:bg-slate-100 dark:bg-slate-800 rounded-full cursor-pointer text-slate-500 dark:text-slate-400 hover:text-white transition-all"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -724,7 +724,7 @@ Thank you for choosing Gurukul!`;
                   <CheckCircle2 className="w-8 h-8" />
                 </div>
                 <h3 className="text-xl font-bold text-white">Admission Record Created</h3>
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-slate-500 dark:text-slate-400">
                   Student {enrolledStudent.name} enrolled for Class {savedClass || "Selected Level"}
                 </p>
                 <p className="text-sm font-bold text-amber-400">Total Fees: ₹{enrolledStudent.totalFees} {enrolledStudent.paymentCycle === "MONTHLY" && `(Monthly plan: ₹${Math.round(enrolledStudent.totalFees / 12)} / mo)`}</p>
@@ -733,15 +733,15 @@ Thank you for choosing Gurukul!`;
               {/* Step 1: SELECT METHOD */}
               {paymentOption === "SELECT" && (
                 <div className="space-y-4">
-                  <p className="text-xs text-center text-slate-300 mb-4">Select the preferred payment method to handle initial academic fees:</p>
+                  <p className="text-xs text-center text-slate-700 dark:text-slate-300 mb-4">Select the preferred payment method to handle initial academic fees:</p>
                   
                   <div className="grid grid-cols-2 gap-4">
                     <button
                       onClick={handleInitiateCashPayment}
-                      className="p-5 bg-slate-950/60 hover:bg-slate-950 border border-slate-800 hover:border-amber-500/60 rounded-2xl flex flex-col items-center justify-center gap-3 transition-all cursor-pointer group"
+                      className="p-5 bg-slate-50 dark:bg-slate-950/60 hover:bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 hover:border-amber-500/60 rounded-2xl flex flex-col items-center justify-center gap-3 transition-all cursor-pointer group"
                     >
                       <DollarSign className="w-8 h-8 text-amber-500 group-hover:scale-110 transition-transform" />
-                      <span className="text-xs font-bold text-slate-200">Pay by Cash</span>
+                      <span className="text-xs font-bold text-slate-800 dark:text-slate-200">Pay by Cash</span>
                     </button>
 
                     <button
@@ -749,10 +749,10 @@ Thank you for choosing Gurukul!`;
                         setPaymentOption("QR");
                         fetchQRForAdmission();
                       }}
-                      className="p-5 bg-slate-950/60 hover:bg-slate-950 border border-slate-800 hover:border-blue-500/60 rounded-2xl flex flex-col items-center justify-center gap-3 transition-all cursor-pointer group"
+                      className="p-5 bg-slate-50 dark:bg-slate-950/60 hover:bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 hover:border-blue-500/60 rounded-2xl flex flex-col items-center justify-center gap-3 transition-all cursor-pointer group"
                     >
                       <QrCode className="w-8 h-8 text-blue-500 group-hover:scale-110 transition-transform" />
-                      <span className="text-xs font-bold text-slate-200">UPI QR Payment</span>
+                      <span className="text-xs font-bold text-slate-800 dark:text-slate-200">UPI QR Payment</span>
                     </button>
                   </div>
                 </div>
@@ -769,14 +769,14 @@ Thank you for choosing Gurukul!`;
                     </div>
                   </div>
 
-                  <p className="text-xs text-slate-400">
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
                     Submit the invoice cash physical slip to the reception desk. Once cash is audited, the admin console will approve and update payment logs.
                   </p>
 
                   <div className="flex gap-3">
                     <button
                       onClick={() => sendWhatsAppNotification(true)}
-                      className="flex-1 py-3 bg-slate-800 hover:bg-slate-750 text-slate-200 font-bold rounded-xl text-xs cursor-pointer border border-slate-750 flex items-center justify-center gap-1.5 transition-all"
+                      className="flex-1 py-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-750 text-slate-800 dark:text-slate-200 font-bold rounded-xl text-xs cursor-pointer border border-slate-750 flex items-center justify-center gap-1.5 transition-all"
                     >
                       <MessageSquare className="w-4 h-4 text-emerald-400" /> Notify Parent
                     </button>
@@ -796,7 +796,7 @@ Thank you for choosing Gurukul!`;
                   {actionLoading ? (
                     <div className="flex flex-col items-center justify-center py-10">
                       <Loader2 className="w-8 h-8 animate-spin text-blue-500 mb-2" />
-                      <p className="text-xs text-slate-400">Generating UPI payment QR code...</p>
+                      <p className="text-xs text-slate-500 dark:text-slate-400">Generating UPI payment QR code...</p>
                     </div>
                   ) : qrCodeData ? (
                     <div className="space-y-5">
@@ -807,33 +807,33 @@ Thank you for choosing Gurukul!`;
                           </div>
 
                           <div className="text-center space-y-1.5">
-                            <p className="text-xs font-bold text-slate-300">Scan QR Code to pay ₹{qrCodeData.amount}</p>
-                            <p className="text-[10px] text-slate-500 font-mono select-all bg-slate-950/60 p-2 rounded-lg border border-slate-800 break-all max-w-sm mx-auto">
+                            <p className="text-xs font-bold text-slate-700 dark:text-slate-300">Scan QR Code to pay ₹{qrCodeData.amount}</p>
+                            <p className="text-[10px] text-slate-500 font-mono select-all bg-slate-50 dark:bg-slate-950/60 p-2 rounded-lg border border-slate-200 dark:border-slate-800 break-all max-w-sm mx-auto">
                               {qrCodeData.upiUri}
                             </p>
                           </div>
 
                           {/* Screenshot file upload & transaction ID verification */}
-                          <div className="space-y-3 pt-3 border-t border-slate-850">
+                          <div className="space-y-3 pt-3 border-t border-slate-100 dark:border-slate-850">
                             <div className="space-y-1">
-                              <label className="text-[9px] font-bold uppercase tracking-wider text-slate-400">Transaction ID / UTR *</label>
+                              <label className="text-[9px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Transaction ID / UTR *</label>
                               <input
                                 type="text"
                                 required
                                 value={txnId}
                                 onChange={(e) => setTxnId(e.target.value)}
                                 placeholder="Enter 12-digit transaction ID"
-                                className="w-full px-3.5 py-2.5 bg-slate-950/50 border border-slate-800 focus:border-blue-500 rounded-xl text-white outline-none text-xs"
+                                className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 focus:border-blue-500 rounded-xl text-slate-900 dark:text-white outline-none text-xs"
                               />
                             </div>
 
                             <div className="space-y-1">
-                              <label className="text-[9px] font-bold uppercase tracking-wider text-slate-400">Upload QR Payment Receipt screenshot</label>
-                              <div className="w-full flex items-center justify-between gap-3 px-3 py-2 bg-slate-950/50 border border-slate-800 rounded-xl">
+                              <label className="text-[9px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Upload QR Payment Receipt screenshot</label>
+                              <div className="w-full flex items-center justify-between gap-3 px-3 py-2 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 rounded-xl">
                                 <span className="text-[10px] text-slate-500 truncate">
                                   {screenshotFile ? screenshotFile.name : "Choose file..."}
                                 </span>
-                                <label className="py-1.5 px-3 bg-slate-800 hover:bg-slate-750 text-white rounded-lg text-[9px] font-bold cursor-pointer inline-flex items-center gap-1">
+                                <label className="py-1.5 px-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-750 text-white rounded-lg text-[9px] font-bold cursor-pointer inline-flex items-center gap-1">
                                   <Upload className="w-3 h-3" /> Select
                                   <input
                                     type="file"
@@ -860,19 +860,19 @@ Thank you for choosing Gurukul!`;
                             <CheckCircle className="w-8 h-8" />
                           </div>
                           <h4 className="font-bold text-sm text-emerald-400">QR Payment verified successfully!</h4>
-                          <p className="text-xs text-slate-400">Receipt reference: {recordedPayment.receiptNumber}</p>
+                          <p className="text-xs text-slate-500 dark:text-slate-400">Receipt reference: {recordedPayment.receiptNumber}</p>
 
                           <div className="space-y-2 pt-2">
                             <button
                               onClick={() => printReceipt(recordedPayment.id)}
-                              className="w-full py-3 bg-slate-800 hover:bg-slate-750 text-slate-200 rounded-xl text-xs font-bold cursor-pointer inline-flex items-center justify-center gap-1.5 transition-all"
+                              className="w-full py-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-750 text-slate-800 dark:text-slate-200 rounded-xl text-xs font-bold cursor-pointer inline-flex items-center justify-center gap-1.5 transition-all"
                             >
                               <Download className="w-4 h-4" /> Download PDF Receipt
                             </button>
                             
                             <button
                               onClick={() => sendWhatsAppNotification(false)}
-                              className="w-full py-3 bg-slate-800 hover:bg-slate-750 text-slate-200 rounded-xl text-xs font-bold cursor-pointer inline-flex items-center justify-center gap-1.5 transition-all border border-slate-750"
+                              className="w-full py-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-750 text-slate-800 dark:text-slate-200 rounded-xl text-xs font-bold cursor-pointer inline-flex items-center justify-center gap-1.5 transition-all border border-slate-750"
                             >
                               <MessageSquare className="w-4 h-4 text-emerald-400" /> Share receipt on WhatsApp
                             </button>

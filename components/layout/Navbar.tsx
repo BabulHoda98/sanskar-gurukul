@@ -15,7 +15,8 @@ function Navbar() {
   if (
     pathname?.startsWith("/admin") ||
     pathname?.startsWith("/employee") ||
-    pathname?.startsWith("/login")
+    pathname?.startsWith("/login") ||
+    pathname?.startsWith("/student-admission")
   ) {
     return null;
   }
