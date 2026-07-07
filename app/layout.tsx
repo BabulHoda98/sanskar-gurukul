@@ -34,6 +34,7 @@ export const metadata: Metadata = {
 import Navbar from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { FloatingActions } from "@/components/layout/FloatingActions";
+import { Toaster } from "react-hot-toast";
 
 function RootLayout({
   children,
@@ -52,6 +53,19 @@ function RootLayout({
         </main>
         <Footer />
         <FloatingActions />
+        <Toaster 
+          position="top-center" 
+          reverseOrder={false}
+          toastOptions={{
+            style: {
+              background: '#0f172a',
+              color: '#f8fafc',
+              border: '1px solid #1e293b',
+              fontSize: '13px',
+              borderRadius: '12px',
+            },
+          }} 
+        />
       </body>
     </html>
   );

@@ -2,11 +2,14 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { toast } from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, FileText, CalendarClock, School } from "lucide-react";
+
+import api from "@/lib/api";
 
 const formSchema = z.object({
   studentName: z.string().min(2, "Student name is required"),
@@ -34,13 +37,25 @@ function AdmissionPage() {
 
   const onSubmit = async (data: FormValues) => {
     setIsSubmitting(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    console.log(data);
-    setIsSubmitting(false);
-    setIsSuccess(true);
-    reset();
-    setTimeout(() => setIsSuccess(false), 5000);
+    try {
+      await api.post("/api/public/inquiry", {
+        studentName: data.studentName,
+        parentName: data.parentName,
+        mobile: data.phone,
+        email: data.email,
+        address: data.message || "",
+        inquiryDetails: `Admission for Class: ${data.class}`,
+      });
+
+      setIsSuccess(true);
+      reset();
+      setTimeout(() => setIsSuccess(false), 5000);
+    } catch (error) {
+      console.error("Inquiry submission error:", error);
+      toast.error("Something went wrong while submitting. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

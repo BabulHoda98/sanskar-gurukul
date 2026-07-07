@@ -14,7 +14,7 @@ function Navbar() {
     { name: "Home", href: "/" },
     { name: "About", href: "/about" },
     { name: "Academics", href: "/academics" },
-    { name: "Admission", href: "/admission" },
+    { name: "Fee Structure", href: "/fees" },
     { name: "Facilities", href: "/facilities" },
     { name: "Gallery", href: "/gallery" },
     { name: "Notice", href: "/notice" },

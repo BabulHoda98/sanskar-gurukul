@@ -1,0 +1,20 @@
+{
+  "classes": {
+    "Nursery": 15000,
+    "LKG": 18000,
+    "UKG": 18000,
+    "Class I": 22000,
+    "Class II": 22000,
+    "Class III": 25000,
+    "Class IV": 25000,
+    "Class V": 25000,
+    "Class VI": 30000,
+    "Class VII": 30000,
+    "Class VIII": 32000
+  },
+  "addons": {
+    "transport": 12000,
+    "dress": 3500,
+    "books": 4000
+  }
+}
