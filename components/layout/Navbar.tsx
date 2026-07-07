@@ -2,13 +2,23 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
 
   const toggleMenu = () => setIsOpen(!isOpen);
+
+  if (
+    pathname?.startsWith("/admin") ||
+    pathname?.startsWith("/employee") ||
+    pathname?.startsWith("/login")
+  ) {
+    return null;
+  }
 
   const navLinks = [
     { name: "Home", href: "/" },

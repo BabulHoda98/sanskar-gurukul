@@ -16,7 +16,7 @@ import { AdminRolesTab } from "@/components/dashboard/AdminRolesTab";
 import { AdminFeesSettingsTab } from "@/components/dashboard/AdminFeesSettingsTab";
 import api, { API_URL } from "@/lib/api";
 
-export default function AdminDashboard() {
+function AdminDashboard() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("students"); // students, enroll, addEmployee, payments, attendance, roles, feesSettings
   const [token, setToken] = useState("");
@@ -487,7 +487,7 @@ export default function AdminDashboard() {
   });
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 pb-16">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 pb-16">
       {/* Top Header */}
       {/* Reusable Console Header */}
       <DashboardHeader
@@ -499,9 +499,9 @@ export default function AdminDashboard() {
         onLogoutClick={handleLogout}
       />
 
-      <div className="max-w-7xl mx-auto px-6 md:px-12 mt-8">
+      <div className="w-full px-4 md:px-6 mt-6">
         {/* Reusable Navigation Tabs */}
-        <div className="flex flex-wrap gap-2 mb-8 bg-slate-900/40 p-1.5 border border-slate-800 rounded-2xl">
+        <div className="flex flex-wrap gap-2 mb-8 bg-white/80 dark:bg-slate-900/40 p-1.5 border border-slate-200 dark:border-slate-800 rounded-lg">
           {[
             { id: "students", label: "Student Ledger", icon: Users },
             { id: "inquiries", label: "Admission Inquiries", icon: FileText },
@@ -530,31 +530,31 @@ export default function AdminDashboard() {
         </div>
 
         {/* Dashboard Panels */}
-        <main className="bg-slate-900/30 border border-slate-800/80 rounded-3xl p-6 md:p-8 min-h-[500px]">
+        <main className="bg-slate-900/30 border border-slate-200 dark:border-slate-800/80 rounded-lg p-6 md:p-8 min-h-[500px]">
           {isLoading && (
             <div className="flex flex-col items-center justify-center py-24">
               <Loader2 className="w-8 h-8 animate-spin text-amber-500 mb-2" />
-              <p className="text-sm text-slate-400">Fetching records...</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400">Fetching records...</p>
             </div>
           )}
 
           {!isLoading && activeTab === "inquiries" && (
             <div className="space-y-6">
-              <div className="flex justify-between items-center pb-4 border-b border-slate-800">
+              <div className="flex justify-between items-center pb-4 border-b border-slate-200 dark:border-slate-800">
                 <div>
                   <h2 className="text-xl font-bold">Admission Inquiry Desk</h2>
-                  <p className="text-xs text-slate-400">Review prospective student inquiries and record details</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">Review prospective student inquiries and record details</p>
                 </div>
                 <button 
                   onClick={fetchInquiries} 
-                  className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-xs font-semibold rounded-xl border border-slate-700 cursor-pointer"
+                  className="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:bg-slate-700 text-xs font-semibold rounded-lg border border-slate-300 dark:border-slate-700 cursor-pointer"
                 >
                   Reload Inquiries
                 </button>
               </div>
 
               {inquiries.length === 0 ? (
-                <div className="text-center py-20 text-slate-500">No inquiries found in database.</div>
+                <div className="text-center py-20 text-slate-500 dark:text-slate-500">No inquiries found in database.</div>
               ) : (
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   {/* Left Column: List */}
@@ -567,20 +567,20 @@ export default function AdminDashboard() {
                           setFeedbackStatus(inq.feedbackStatus || "DONE");
                           setFeedbackNotes(inq.feedbackNotes || "");
                         }}
-                        className={`p-5 rounded-2xl border transition-all cursor-pointer ${selectedInquiry?.id === inq.id ? "bg-slate-800/50 border-amber-500/80" : "bg-slate-900/40 border-slate-800 hover:border-slate-700"}`}
+                        className={`p-5 rounded-lg border transition-all cursor-pointer ${selectedInquiry?.id === inq.id ? "bg-slate-100 dark:bg-slate-800/50 border-amber-500/80" : "bg-white/80 dark:bg-slate-900/40 border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:border-slate-700"}`}
                       >
                         <div className="flex justify-between items-start mb-2">
-                          <h4 className="font-bold text-sm text-white">{inq.studentName}</h4>
+                          <h4 className="font-bold text-sm text-slate-900 dark:text-white">{inq.studentName}</h4>
                           <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${inq.feedbackStatus === "DONE" ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" : inq.feedbackStatus === "NOT_DONE" ? "bg-rose-500/10 text-rose-400 border border-rose-500/20" : "bg-amber-500/10 text-amber-400 border border-amber-500/20"}`}>
                             {inq.feedbackStatus}
                           </span>
                         </div>
-                        <div className="space-y-1 text-xs text-slate-400 mb-3">
+                        <div className="space-y-1 text-xs text-slate-500 dark:text-slate-400 mb-3">
                           <p className="flex items-center gap-1.5"><Phone className="w-3 h-3 text-amber-500" /> {inq.mobile}</p>
                           <p className="flex items-center gap-1.5"><Mail className="w-3 h-3 text-amber-500" /> {inq.email || "N/A"}</p>
                           <p className="flex items-center gap-1.5"><MapPin className="w-3 h-3 text-amber-500" /> {inq.address}</p>
                         </div>
-                        <div className="bg-slate-950/40 p-3 rounded-xl border border-slate-900 text-xs text-slate-300 line-clamp-2">
+                        <div className="bg-slate-50 dark:bg-slate-950/40 p-3 rounded-lg border border-slate-900 text-xs text-slate-700 dark:text-slate-300 line-clamp-2">
                           {inq.inquiryDetails}
                         </div>
                       </div>
@@ -588,22 +588,22 @@ export default function AdminDashboard() {
                   </div>
 
                   {/* Right Column: Feedback Panel */}
-                  <div className="bg-slate-900/50 border border-slate-800 rounded-2xl p-6 h-fit">
+                  <div className="bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-lg p-6 h-fit">
                     {selectedInquiry ? (
                       <form onSubmit={handleInquiryFeedback} className="space-y-5">
-                        <h3 className="font-bold text-sm text-white border-b border-slate-800 pb-3">
+                        <h3 className="font-bold text-sm text-slate-900 dark:text-white border-b border-slate-200 dark:border-slate-800 pb-3">
                           Record Feedback: {selectedInquiry.studentName}
                         </h3>
 
                         <div className="space-y-1.5">
-                          <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Feedback Status</label>
+                          <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Feedback Status</label>
                           <div className="flex gap-2">
                             {["PENDING", "DONE", "NOT_DONE"].map((st) => (
                               <button
                                 key={st}
                                 type="button"
                                 onClick={() => setFeedbackStatus(st)}
-                                className={`flex-1 py-2 text-xs font-bold rounded-xl border transition-all cursor-pointer ${feedbackStatus === st ? "bg-amber-600/10 border-amber-500 text-amber-400" : "bg-slate-950/30 border-slate-800 text-slate-400"}`}
+                                className={`flex-1 py-2 text-xs font-bold rounded-lg border transition-all cursor-pointer ${feedbackStatus === st ? "bg-amber-600/10 border-amber-500 text-amber-400" : "bg-slate-950/30 border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400"}`}
                               >
                                 {st}
                               </button>
@@ -612,28 +612,28 @@ export default function AdminDashboard() {
                         </div>
 
                         <div className="space-y-1.5">
-                          <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Feedback Notes</label>
+                          <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Feedback Notes</label>
                           <textarea
                             required
                             rows={4}
                             value={feedbackNotes}
                             onChange={(e) => setFeedbackNotes(e.target.value)}
                             placeholder="Type progress feedback details here..."
-                            className="w-full px-4 py-2.5 bg-slate-950/50 border border-slate-800 focus:border-amber-500 rounded-xl text-white outline-none text-xs resize-none"
+                            className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 focus:border-amber-500 rounded-lg text-slate-900 dark:text-white outline-none text-xs resize-none"
                           />
                         </div>
 
                         <button
                           type="submit"
                           disabled={actionLoading}
-                          className="w-full py-3 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 rounded-xl text-xs font-bold text-white shadow-lg cursor-pointer flex items-center justify-center gap-1"
+                          className="w-full py-3 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 rounded-lg text-xs font-bold text-white shadow-lg cursor-pointer flex items-center justify-center gap-1"
                         >
                           {actionLoading && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                           Save Feedback Log
                         </button>
                       </form>
                     ) : (
-                      <div className="text-center py-12 text-slate-500 text-xs">
+                      <div className="text-center py-12 text-slate-500 dark:text-slate-500 text-xs">
                         Select an inquiry from the list to log feedback and update its status.
                       </div>
                     )}
@@ -645,68 +645,68 @@ export default function AdminDashboard() {
 
           {!isLoading && activeTab === "students" && (
             <div className="space-y-6">
-              <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 pb-4 border-b border-slate-800">
+              <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 pb-4 border-b border-slate-200 dark:border-slate-800">
                 <div>
                   <h2 className="text-xl font-bold">Student Ledger Registry</h2>
-                  <p className="text-xs text-slate-400">View enrolled students, fee status summaries, and detailed payment history records</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">View enrolled students, fee status summaries, and detailed payment history records</p>
                 </div>
                 <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
-                  <div className="flex bg-slate-900 border border-slate-800 rounded-xl p-0.5">
+                  <div className="flex bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-0.5">
                     <button
                       onClick={() => setCycleFilter("ALL")}
-                      className={`px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase transition-colors cursor-pointer ${cycleFilter === "ALL" ? "bg-amber-600 text-white" : "text-slate-400 hover:text-slate-200"}`}
+                      className={`px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase transition-colors cursor-pointer ${cycleFilter === "ALL" ? "bg-amber-600 text-white" : "text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:text-slate-200"}`}
                     >
                       All Cycles
                     </button>
                     <button
                       onClick={() => setCycleFilter("MONTHLY")}
-                      className={`px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase transition-colors cursor-pointer ${cycleFilter === "MONTHLY" ? "bg-amber-600 text-white" : "text-slate-400 hover:text-slate-200"}`}
+                      className={`px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase transition-colors cursor-pointer ${cycleFilter === "MONTHLY" ? "bg-amber-600 text-white" : "text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:text-slate-200"}`}
                     >
                       Monthly
                     </button>
                     <button
                       onClick={() => setCycleFilter("ANNUAL")}
-                      className={`px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase transition-colors cursor-pointer ${cycleFilter === "ANNUAL" ? "bg-amber-600 text-white" : "text-slate-400 hover:text-slate-200"}`}
+                      className={`px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase transition-colors cursor-pointer ${cycleFilter === "ANNUAL" ? "bg-amber-600 text-white" : "text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:text-slate-200"}`}
                     >
                       Annual
                     </button>
                   </div>
                   <div className="relative w-full md:w-56">
-                    <Search className="absolute left-3.5 top-2.5 text-slate-400 w-3.5 h-3.5" />
+                    <Search className="absolute left-3.5 top-2.5 text-slate-500 dark:text-slate-400 w-3.5 h-3.5" />
                     <input
                       type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       placeholder="Search name, email, phone..."
-                      className="w-full pl-9 pr-4 py-2 bg-slate-950/40 border border-slate-800 focus:border-amber-500 rounded-xl text-xs text-white outline-none"
+                      className="w-full pl-9 pr-4 py-2 bg-slate-50 dark:bg-slate-950/40 border border-slate-200 dark:border-slate-800 focus:border-amber-500 rounded-lg text-xs text-slate-900 dark:text-white outline-none"
                     />
                   </div>
                 </div>
               </div>
 
               {filteredStudents.length === 0 ? (
-                <div className="text-center py-20 text-slate-500 text-sm">No student records match search filter.</div>
+                <div className="text-center py-20 text-slate-500 dark:text-slate-500 text-sm">No student records match search filter.</div>
               ) : (
                 <div className="space-y-4">
                   {filteredStudents.map((st: any) => (
                     <div 
                       key={st.id} 
-                      className="bg-slate-900/40 border border-slate-800/70 rounded-2xl overflow-hidden transition-all"
+                      className="bg-white/80 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800/70 rounded-lg overflow-hidden transition-all"
                     >
                       {/* Top Header Card */}
                       <div className="p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div className="flex items-start gap-4">
                           {st.photo ? (
-                            <img src={`${API_URL}${st.photo}`} alt={st.name} className="w-12 h-12 rounded-full object-cover border border-slate-800 shrink-0" />
+                            <img src={`${API_URL}${st.photo}`} alt={st.name} className="w-12 h-12 rounded-full object-cover border border-slate-200 dark:border-slate-800 shrink-0" />
                           ) : (
-                            <div className="w-12 h-12 rounded-full bg-slate-950/60 flex items-center justify-center border border-slate-800 shrink-0">
-                              <User className="w-6 h-6 text-slate-400" />
+                            <div className="w-12 h-12 rounded-full bg-slate-950/60 flex items-center justify-center border border-slate-200 dark:border-slate-800 shrink-0">
+                              <User className="w-6 h-6 text-slate-500 dark:text-slate-400" />
                             </div>
                           )}
                           <div>
-                            <h3 className="font-bold text-sm text-white">{st.name}</h3>
-                            <p className="text-[10px] text-slate-500 mt-0.5 font-mono select-all">UUID: {st.id}</p>
-                            <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-xs text-slate-400 mt-2">
+                            <h3 className="font-bold text-sm text-slate-900 dark:text-white">{st.name}</h3>
+                            <p className="text-[10px] text-slate-500 dark:text-slate-500 mt-0.5 font-mono select-all">UUID: {st.id}</p>
+                            <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-xs text-slate-500 dark:text-slate-400 mt-2">
                               <span>Mobile: {st.mobile}</span>
                               {st.parentAlternatePhone && <span>Alt Mobile: {st.parentAlternatePhone}</span>}
                               <span>Email: {st.email}</span>
@@ -715,7 +715,7 @@ export default function AdminDashboard() {
                               {st.bloodGroup && <span>Blood Group: {st.bloodGroup}</span>}
                               {st.fatherAadhar && <span>Father Aadhaar: {st.fatherAadhar}</span>}
                               {st.motherAadhar && <span>Mother Aadhaar: {st.motherAadhar}</span>}
-                              <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-slate-950/60 text-amber-400 border border-slate-800">
+                              <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-slate-950/60 text-amber-400 border border-slate-200 dark:border-slate-800">
                                 Plan: {st.paymentCycle === "MONTHLY" ? "Monthly" : "Annual"}
                               </span>
                               {st.paymentCycle === "MONTHLY" ? (() => {
@@ -723,7 +723,7 @@ export default function AdminDashboard() {
                                 const monthsPaid = monthlyAmt > 0 ? Math.floor(st.paidFees / monthlyAmt) : 0;
                                 const monthsUnpaid = 12 - monthsPaid;
                                 return (
-                                  <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-slate-950/60 text-emerald-400 border border-slate-800">
+                                  <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-slate-950/60 text-emerald-400 border border-slate-200 dark:border-slate-800">
                                     Paid: {monthsPaid} Months | Unpaid: {monthsUnpaid} Months
                                   </span>
                                 );
@@ -733,26 +733,26 @@ export default function AdminDashboard() {
                                 </span>
                               )}
                             </div>
-                            <div className="text-xs text-slate-400 mt-2 bg-slate-950/40 p-2.5 rounded-xl border border-slate-850/50 max-w-2xl">
+                            <div className="text-xs text-slate-500 dark:text-slate-400 mt-2 bg-slate-50 dark:bg-slate-950/40 p-2.5 rounded-lg border border-slate-850/50 max-w-2xl">
                               <span className="text-[9px] font-bold uppercase tracking-wider text-amber-500 block mb-1">Registration Details & Facilities:</span>
-                              <p className="whitespace-pre-line text-slate-300 leading-relaxed font-mono text-[10px]">{st.address}</p>
+                              <p className="whitespace-pre-line text-slate-700 dark:text-slate-300 leading-relaxed font-mono text-[10px]">{st.address}</p>
                             </div>
                           </div>
                         </div>
 
                         {/* Fee Status metrics */}
                         <div className="flex gap-3 text-center">
-                          <div className="bg-slate-950/60 border border-slate-850 px-3 py-2 rounded-xl min-w-[80px]">
-                            <p className="text-[9px] font-bold text-slate-400 uppercase">Total</p>
-                            <p className="text-xs font-bold text-slate-200 mt-0.5">₹{st.totalFees}</p>
+                          <div className="bg-slate-100 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-850 px-3 py-2 rounded-lg min-w-[80px]">
+                            <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase">Total</p>
+                            <p className="text-xs font-bold text-slate-900 dark:text-slate-200 mt-0.5">₹{st.totalFees}</p>
                           </div>
-                          <div className="bg-slate-950/60 border border-slate-850 px-3 py-2 rounded-xl min-w-[80px]">
-                            <p className="text-[9px] font-bold text-emerald-400 uppercase">Paid</p>
-                            <p className="text-xs font-bold text-emerald-400 mt-0.5">₹{st.paidFees}</p>
+                          <div className="bg-emerald-50 dark:bg-slate-950/60 border border-emerald-100 dark:border-slate-850 px-3 py-2 rounded-lg min-w-[80px]">
+                            <p className="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 uppercase">Paid</p>
+                            <p className="text-xs font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">₹{st.paidFees}</p>
                           </div>
-                          <div className="bg-slate-950/60 border border-slate-850 px-3 py-2 rounded-xl min-w-[80px]">
-                            <p className="text-[9px] font-bold text-rose-400 uppercase">Pending</p>
-                            <p className="text-xs font-bold text-rose-400 mt-0.5">₹{st.pendingFees}</p>
+                          <div className={`px-3 py-2 rounded-lg min-w-[80px] border ${Number(st.pendingFees) === 0 ? "bg-slate-100 dark:bg-slate-950/60 border-slate-200 dark:border-slate-850" : "bg-amber-50 dark:bg-slate-950/60 border-amber-100 dark:border-slate-850"}`}>
+                            <p className={`text-[9px] font-bold uppercase ${Number(st.pendingFees) === 0 ? "text-slate-500 dark:text-slate-400" : "text-amber-600 dark:text-amber-400"}`}>Pending</p>
+                            <p className={`text-xs font-bold mt-0.5 ${Number(st.pendingFees) === 0 ? "text-slate-900 dark:text-slate-200" : "text-amber-600 dark:text-amber-400"}`}>₹{st.pendingFees}</p>
                           </div>
                           <button
                             onClick={() => {
@@ -766,14 +766,14 @@ export default function AdminDashboard() {
                               const url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
                               window.open(url, "_blank");
                             }}
-                            className="px-3 bg-emerald-600 hover:bg-emerald-500 rounded-xl text-[10px] font-bold text-white cursor-pointer flex items-center gap-1 transition-colors border border-emerald-500/20"
+                            className="px-4 py-2 bg-[#25D366] hover:bg-[#128C7E] rounded-lg text-[11px] font-bold text-white cursor-pointer flex items-center justify-center gap-1.5 transition-all shadow-md shadow-[#25D366]/20 border border-transparent"
                             title={`Send ${st.paymentCycle.toLowerCase()} fee reminder notification via WhatsApp`}
                           >
-                            <MessageSquare className="w-3.5 h-3.5" /> Remind WA
+                            <MessageSquare className="w-3.5 h-3.5" /> WhatsApp
                           </button>
                           <button
                             onClick={() => setExpandedStudentId(expandedStudentId === st.id ? null : st.id)}
-                            className="px-3 bg-slate-800 hover:bg-slate-700 rounded-xl text-xs font-bold text-slate-200 cursor-pointer"
+                            className="px-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:bg-slate-700 rounded-lg text-xs font-bold text-slate-800 dark:text-slate-200 cursor-pointer"
                           >
                             {expandedStudentId === st.id ? "Hide Payments" : "View Payments"}
                           </button>
@@ -782,10 +782,10 @@ export default function AdminDashboard() {
 
                       {/* Expandable payments list */}
                       {expandedStudentId === st.id && (
-                        <div className="bg-slate-950/40 border-t border-slate-850 p-6 space-y-6">
+                        <div className="bg-slate-50 dark:bg-slate-950/40 border-t border-slate-850 p-6 space-y-6">
                           {/* Visual Fee Plan Breakdown */}
                           <div className="space-y-3">
-                            <h4 className="text-xs font-bold text-slate-300 uppercase tracking-wider">Fee Registry Breakdown Schedule ({st.paymentCycle})</h4>
+                            <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Fee Registry Breakdown Schedule ({st.paymentCycle})</h4>
                             
                             {st.paymentCycle === "MONTHLY" ? (() => {
                               const monthlyAmt = Math.round(st.totalFees / 12);
@@ -811,9 +811,9 @@ export default function AdminDashboard() {
                                     }
 
                                     return (
-                                      <div key={m} className={`p-3 border rounded-xl flex flex-col justify-between ${bgStyle} h-20 transition-all hover:scale-[1.02]`}>
+                                      <div key={m} className={`p-3 border rounded-lg flex flex-col justify-between ${bgStyle} h-20 transition-all hover:scale-[1.02]`}>
                                         <div className="flex justify-between items-start">
-                                          <span className="text-[10px] font-bold text-slate-300 uppercase">{m}</span>
+                                          <span className="text-[10px] font-bold text-slate-700 dark:text-slate-300 uppercase">{m}</span>
                                           <span className="text-[8px] font-extrabold px-1.5 py-0.5 rounded-full bg-slate-950/60 uppercase">
                                             {status}
                                           </span>
@@ -825,27 +825,27 @@ export default function AdminDashboard() {
                                 </div>
                               );
                             })() : (
-                              <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                              <div className="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-lg p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                                 <div className="space-y-1">
-                                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Annual Fee Status</span>
-                                  <h5 className="text-sm font-bold text-white">Full Academic Year Plan</h5>
-                                  <p className="text-xs text-slate-400">Standard single-payment configuration</p>
+                                  <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest block">Annual Fee Status</span>
+                                  <h5 className="text-sm font-bold text-slate-900 dark:text-white">Full Academic Year Plan</h5>
+                                  <p className="text-xs text-slate-500 dark:text-slate-400">Standard single-payment configuration</p>
                                 </div>
                                 <div className="flex gap-4 flex-wrap">
-                                  <div className="bg-slate-950/50 px-3.5 py-2 rounded-xl border border-slate-800 text-center min-w-[100px]">
-                                    <p className="text-[9px] font-bold text-slate-400 uppercase">Annual Fee</p>
-                                    <p className="text-xs font-bold text-white mt-0.5">₹{st.totalFees}</p>
+                                  <div className="bg-slate-50 dark:bg-slate-950/50 px-3.5 py-2 rounded-lg border border-slate-200 dark:border-slate-800 text-center min-w-[100px]">
+                                    <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase">Annual Fee</p>
+                                    <p className="text-xs font-bold text-slate-900 dark:text-white mt-0.5">₹{st.totalFees}</p>
                                   </div>
-                                  <div className="bg-slate-950/50 px-3.5 py-2 rounded-xl border border-slate-800 text-center min-w-[100px]">
-                                    <p className="text-[9px] font-bold text-emerald-400 uppercase">Amount Paid</p>
-                                    <p className="text-xs font-bold text-emerald-400 mt-0.5">₹{st.paidFees}</p>
+                                  <div className="bg-emerald-50 dark:bg-slate-950/50 px-3.5 py-2 rounded-lg border border-emerald-100 dark:border-slate-800 text-center min-w-[100px]">
+                                    <p className="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 uppercase">Amount Paid</p>
+                                    <p className="text-xs font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">₹{st.paidFees}</p>
                                   </div>
-                                  <div className="bg-slate-950/50 px-3.5 py-2 rounded-xl border border-slate-800 text-center min-w-[100px]">
-                                    <p className="text-[9px] font-bold text-rose-400 uppercase">Remaining Due</p>
-                                    <p className="text-xs font-bold text-rose-400 mt-0.5">₹{st.pendingFees}</p>
+                                  <div className={`px-3.5 py-2 rounded-lg border text-center min-w-[100px] ${Number(st.pendingFees) === 0 ? "bg-slate-50 dark:bg-slate-950/50 border-slate-200 dark:border-slate-800" : "bg-amber-50 dark:bg-slate-950/50 border-amber-100 dark:border-slate-800"}`}>
+                                    <p className={`text-[9px] font-bold uppercase ${Number(st.pendingFees) === 0 ? "text-slate-500 dark:text-slate-400" : "text-amber-600 dark:text-amber-400"}`}>Remaining Due</p>
+                                    <p className={`text-xs font-bold mt-0.5 ${Number(st.pendingFees) === 0 ? "text-slate-900 dark:text-white" : "text-amber-600 dark:text-amber-400"}`}>₹{st.pendingFees}</p>
                                   </div>
                                 </div>
-                                <div className="px-4 py-2 rounded-xl bg-slate-950/40 border border-slate-800">
+                                <div className="px-4 py-2 rounded-lg bg-slate-50 dark:bg-slate-950/40 border border-slate-200 dark:border-slate-800">
                                   <span className={`text-[10px] font-extrabold uppercase px-2 py-1 rounded-full ${st.pendingFees === 0 ? "bg-emerald-600/10 text-emerald-400 border border-emerald-500/20" : "bg-rose-600/10 text-rose-400 border border-rose-500/20"}`}>
                                     {st.pendingFees === 0 ? "Fully Paid" : "Unpaid Balance Due"}
                                   </span>
@@ -855,17 +855,17 @@ export default function AdminDashboard() {
                           </div>
 
                           {/* Payment Log History List */}
-                          <div className="space-y-3 pt-3 border-t border-slate-800/60">
-                            <h4 className="text-xs font-bold text-slate-300 uppercase tracking-wider">Transaction Receipt History Logs</h4>
+                          <div className="space-y-3 pt-3 border-t border-slate-200 dark:border-slate-800/60">
+                            <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Transaction Receipt History Logs</h4>
                             {!st.payments || st.payments.length === 0 ? (
-                              <p className="text-slate-500 text-xs italic">No transactions have been recorded or approved for this student yet.</p>
+                              <p className="text-slate-500 dark:text-slate-500 text-xs italic">No transactions have been recorded or approved for this student yet.</p>
                             ) : (
                               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                                 {st.payments.map((p: any) => (
-                                  <div key={p.id} className="flex justify-between items-center bg-slate-900/30 border border-slate-850 p-3.5 rounded-xl hover:border-slate-800 transition-colors">
+                                  <div key={p.id} className="flex justify-between items-center bg-slate-900/30 border border-slate-850 p-3.5 rounded-lg hover:border-slate-200 dark:border-slate-800 transition-colors">
                                     <div className="space-y-1">
                                       <div className="flex items-center gap-2">
-                                        <span className="text-xs font-bold text-white">₹{p.amount}</span>
+                                        <span className="text-xs font-bold text-slate-900 dark:text-white">₹{p.amount}</span>
                                         <span className={`px-2 py-0.5 rounded-full text-[8px] font-bold ${p.paymentMethod === "QR" ? "bg-blue-600/10 text-blue-400 border border-blue-500/10" : p.paymentMethod === "CASH" ? "bg-amber-600/10 text-amber-400 border border-amber-500/10" : "bg-purple-600/10 text-purple-400 border border-purple-500/10"}`}>
                                           {p.paymentMethod}
                                         </span>
@@ -873,16 +873,16 @@ export default function AdminDashboard() {
                                           {p.status}
                                         </span>
                                       </div>
-                                      <p className="text-[10px] text-slate-400">
+                                      <p className="text-[10px] text-slate-500 dark:text-slate-400">
                                         Receipt: {p.receiptNumber} | {new Date(p.createdAt).toLocaleString()}
                                       </p>
-                                      {p.transactionId && <p className="text-[9px] text-slate-500 font-mono">Ref ID: {p.transactionId}</p>}
+                                      {p.transactionId && <p className="text-[9px] text-slate-500 dark:text-slate-500 font-mono">Ref ID: {p.transactionId}</p>}
                                     </div>
 
                                     {p.status === "COMPLETED" && (
                                       <button
                                         onClick={() => printReceipt(p.id)}
-                                        className="p-2 bg-slate-800 hover:bg-slate-700 rounded-lg text-slate-300 hover:text-white cursor-pointer transition-colors border border-slate-700/50"
+                                        className="p-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:bg-slate-700 rounded-lg text-slate-700 dark:text-slate-300 hover:text-white cursor-pointer transition-colors border border-slate-200 dark:border-slate-300 dark:border-slate-700/50"
                                         title="Print Invoice"
                                       >
                                         <Download className="w-3.5 h-3.5" />
@@ -904,16 +904,16 @@ export default function AdminDashboard() {
 
           {!isLoading && activeTab === "enroll" && (
             <div className="max-w-xl mx-auto text-center py-16 space-y-6">
-              <div className="p-4 bg-gradient-to-tr from-amber-500 to-orange-600 rounded-3xl w-fit mx-auto shadow-lg shadow-orange-500/10">
+              <div className="p-4 bg-gradient-to-tr from-amber-500 to-orange-600 rounded-lg w-fit mx-auto shadow-lg shadow-orange-500/10">
                 <GraduationCap className="w-10 h-10 text-white" />
               </div>
               <div className="space-y-2">
                 <h3 className="text-xl font-bold">Gurukul Admission & Fees Portal</h3>
-                <p className="text-xs text-slate-400">Launch the dedicated student enrollment portal to register details, select classes, choose optional facilities, and process QR or Cash payments.</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">Launch the dedicated student enrollment portal to register details, select classes, choose optional facilities, and process QR or Cash payments.</p>
               </div>
               <button
                 onClick={() => router.push("/student-admission")}
-                className="px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white font-bold rounded-2xl text-xs shadow-lg shadow-orange-500/20 cursor-pointer transition-all inline-flex items-center gap-2 border border-transparent"
+                className="px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white font-bold rounded-lg text-xs shadow-lg shadow-orange-500/20 cursor-pointer transition-all inline-flex items-center gap-2 border border-transparent"
               >
                 Launch Admission Console <ArrowUpRight className="w-4 h-4" />
               </button>
@@ -922,107 +922,107 @@ export default function AdminDashboard() {
 
           {!isLoading && activeTab === "addEmployee" && (
             <div className="space-y-6">
-              <div className="border-b border-slate-800 pb-4">
+              <div className="border-b border-slate-200 dark:border-slate-800 pb-4">
                 <h2 className="text-xl font-bold">Add Employee Account</h2>
-                <p className="text-xs text-slate-400">Create new staff profiles in the school registry</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">Create new staff profiles in the school registry</p>
               </div>
 
-              <form onSubmit={handleAddEmployee} className="space-y-6 max-w-4xl bg-slate-900/50 border border-slate-800 rounded-2xl p-6">
+              <form onSubmit={handleAddEmployee} className="space-y-6 w-full bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-lg p-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Full Name *</label>
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Full Name *</label>
                     <input
                       type="text" required name="name"
                       value={empForm.name} onChange={(e) => setEmpForm({...empForm, name: e.target.value})}
                       placeholder="Enter full name"
-                      className="w-full px-4 py-2.5 bg-slate-950/50 border border-slate-800 focus:border-amber-500 rounded-xl text-white outline-none text-xs"
+                      className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 focus:border-amber-500 rounded-lg text-slate-900 dark:text-white outline-none text-xs"
                     />
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Email Address *</label>
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Email Address *</label>
                     <input
                       type="email" required name="email"
                       value={empForm.email} onChange={(e) => setEmpForm({...empForm, email: e.target.value})}
                       placeholder="employee@gurukul.com"
-                      className="w-full px-4 py-2.5 bg-slate-950/50 border border-slate-800 focus:border-amber-500 rounded-xl text-white outline-none text-xs"
+                      className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 focus:border-amber-500 rounded-lg text-slate-900 dark:text-white outline-none text-xs"
                     />
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Password *</label>
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Password *</label>
                     <input
                       type="password" required name="password"
                       value={empForm.password} onChange={(e) => setEmpForm({...empForm, password: e.target.value})}
                       placeholder="Temporary password"
-                      className="w-full px-4 py-2.5 bg-slate-950/50 border border-slate-800 focus:border-amber-500 rounded-xl text-white outline-none text-xs"
+                      className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 focus:border-amber-500 rounded-lg text-slate-900 dark:text-white outline-none text-xs"
                     />
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Mobile Number *</label>
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Mobile Number *</label>
                     <input
                       type="tel" required name="mobile"
                       value={empForm.mobile} onChange={(e) => setEmpForm({...empForm, mobile: e.target.value})}
                       placeholder="10-digit mobile"
-                      className="w-full px-4 py-2.5 bg-slate-950/50 border border-slate-800 focus:border-amber-500 rounded-xl text-white outline-none text-xs"
+                      className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 focus:border-amber-500 rounded-lg text-slate-900 dark:text-white outline-none text-xs"
                     />
                   </div>
 
                   <div className="space-y-1.5 md:col-span-2">
-                    <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Address *</label>
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Address *</label>
                     <textarea
                       required name="address" rows={2}
                       value={empForm.address} onChange={(e) => setEmpForm({...empForm, address: e.target.value})}
                       placeholder="Full residential address"
-                      className="w-full px-4 py-2.5 bg-slate-950/50 border border-slate-800 focus:border-amber-500 rounded-xl text-white outline-none text-xs resize-none"
+                      className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 focus:border-amber-500 rounded-lg text-slate-900 dark:text-white outline-none text-xs resize-none"
                     />
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Aadhaar Card Number *</label>
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Aadhaar Card Number *</label>
                     <input
                       type="text" required name="aadhaarNumber"
                       value={empForm.aadhaarNumber} onChange={(e) => setEmpForm({...empForm, aadhaarNumber: e.target.value})}
                       placeholder="12-digit Aadhaar number"
-                      className="w-full px-4 py-2.5 bg-slate-950/50 border border-slate-800 focus:border-amber-500 rounded-xl text-white outline-none text-xs"
+                      className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 focus:border-amber-500 rounded-lg text-slate-900 dark:text-white outline-none text-xs"
                     />
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400">PAN Card Number (Optional)</label>
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">PAN Card Number (Optional)</label>
                     <input
                       type="text" name="panCard"
                       value={empForm.panCard} onChange={(e) => setEmpForm({...empForm, panCard: e.target.value})}
                       placeholder="10-digit PAN"
-                      className="w-full px-4 py-2.5 bg-slate-950/50 border border-slate-800 focus:border-amber-500 rounded-xl text-white outline-none text-xs"
+                      className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 focus:border-amber-500 rounded-lg text-slate-900 dark:text-white outline-none text-xs"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Profile Photo *</label>
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Profile Photo *</label>
                     <input
                       type="file" required accept="image/*"
                       onChange={(e) => { if (e.target.files) setProfilePhoto(e.target.files[0]); }}
-                      className="w-full text-xs text-slate-400 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-slate-800 file:text-slate-200 file:cursor-pointer"
+                      className="w-full text-xs text-slate-500 dark:text-slate-400 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-100 dark:bg-slate-800 file:text-slate-800 dark:text-slate-200 file:cursor-pointer"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Aadhaar Photo *</label>
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Aadhaar Photo *</label>
                     <input
                       type="file" required accept="image/*"
                       onChange={(e) => { if (e.target.files) setAadhaarPhoto(e.target.files[0]); }}
-                      className="w-full text-xs text-slate-400 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-slate-800 file:text-slate-200 file:cursor-pointer"
+                      className="w-full text-xs text-slate-500 dark:text-slate-400 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-100 dark:bg-slate-800 file:text-slate-800 dark:text-slate-200 file:cursor-pointer"
                     />
                   </div>
 
                   <div className="space-y-2 md:col-span-2">
-                    <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400">PAN Card Photo (Optional)</label>
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">PAN Card Photo (Optional)</label>
                     <input
                       type="file" accept="image/*"
                       onChange={(e) => { if (e.target.files) setPanPhoto(e.target.files[0]); }}
-                      className="w-full text-xs text-slate-400 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-slate-800 file:text-slate-200 file:cursor-pointer"
+                      className="w-full text-xs text-slate-500 dark:text-slate-400 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-100 dark:bg-slate-800 file:text-slate-800 dark:text-slate-200 file:cursor-pointer"
                     />
                   </div>
                 </div>
@@ -1030,7 +1030,7 @@ export default function AdminDashboard() {
                 <button
                   type="submit"
                   disabled={actionLoading}
-                  className="w-full md:w-auto px-8 py-3 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white rounded-xl text-xs font-bold shadow-lg cursor-pointer flex items-center justify-center gap-1.5"
+                  className="w-full md:w-auto px-8 py-3 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white rounded-lg text-xs font-bold shadow-lg cursor-pointer flex items-center justify-center gap-1.5"
                 >
                   {actionLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <UserPlus className="w-4 h-4" />}
                   Register Employee
@@ -1041,19 +1041,19 @@ export default function AdminDashboard() {
 
           {!isLoading && activeTab === "payments" && (
             <div className="space-y-6">
-              <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 pb-4 border-b border-slate-800">
+              <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 pb-4 border-b border-slate-200 dark:border-slate-800">
                 <div>
                   <h2 className="text-xl font-bold">Financial Records</h2>
-                  <p className="text-xs text-slate-400">Logs of all QR, Cash, and Card fee payments received system-wide</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">Logs of all QR, Cash, and Card fee payments received system-wide</p>
                 </div>
 
                 {/* Filters */}
-                <div className="flex gap-1.5 bg-slate-950/40 p-1 border border-slate-800 rounded-xl w-fit">
+                <div className="flex gap-1.5 bg-slate-50 dark:bg-slate-950/40 p-1 border border-slate-200 dark:border-slate-800 rounded-lg w-fit">
                   {["ALL", "QR", "CASH", "CARD"].map((m) => (
                     <button
                       key={m}
                       onClick={() => setPaymentFilter(m)}
-                      className={`px-3.5 py-1.5 rounded-lg text-[10px] font-bold transition-all cursor-pointer ${paymentFilter === m ? "bg-slate-800 text-amber-400" : "text-slate-400"}`}
+                      className={`px-3.5 py-1.5 rounded-lg text-[10px] font-bold transition-all cursor-pointer ${paymentFilter === m ? "bg-slate-100 dark:bg-slate-800 text-amber-400" : "text-slate-500 dark:text-slate-400"}`}
                     >
                       {m}
                     </button>
@@ -1064,37 +1064,37 @@ export default function AdminDashboard() {
               {/* Direct administrative payments form */}
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Form Intake */}
-                <div className="lg:col-span-1 bg-slate-900/50 border border-slate-800 rounded-2xl p-5 space-y-4 h-fit">
-                  <h3 className="font-bold text-xs text-slate-200">Take/Record a Payment</h3>
+                <div className="lg:col-span-1 bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-lg p-5 space-y-4 h-fit">
+                  <h3 className="font-bold text-xs text-slate-800 dark:text-slate-200">Take/Record a Payment</h3>
 
                   <div className="space-y-1.5">
-                    <label className="text-[9px] font-bold uppercase tracking-wider text-slate-400">Student ID *</label>
+                    <label className="text-[9px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Student ID *</label>
                     <input
                       type="text"
                       value={studentId}
                       onChange={(e) => setStudentId(e.target.value)}
                       placeholder="Student UUID"
-                      className="w-full px-3.5 py-2 bg-slate-950/50 border border-slate-800 focus:border-amber-500 rounded-xl text-white outline-none text-xs"
+                      className="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 focus:border-amber-500 rounded-lg text-slate-900 dark:text-white outline-none text-xs"
                     />
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-[9px] font-bold uppercase tracking-wider text-slate-400">Amount (INR) *</label>
+                    <label className="text-[9px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Amount (INR) *</label>
                     <input
                       type="number"
                       value={paymentAmount}
                       onChange={(e) => setPaymentAmount(e.target.value)}
                       placeholder="Amount to pay"
-                      className="w-full px-3.5 py-2 bg-slate-950/50 border border-slate-800 focus:border-amber-500 rounded-xl text-white outline-none text-xs"
+                      className="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 focus:border-amber-500 rounded-lg text-slate-900 dark:text-white outline-none text-xs"
                     />
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-[9px] font-bold uppercase tracking-wider text-slate-400">Method</label>
+                    <label className="text-[9px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Method</label>
                     <select
                       value={paymentMethod}
                       onChange={(e) => setPaymentMethod(e.target.value)}
-                      className="w-full px-3.5 py-2 bg-slate-950/50 border border-slate-800 focus:border-amber-500 rounded-xl text-white outline-none text-xs"
+                      className="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 focus:border-amber-500 rounded-lg text-slate-900 dark:text-white outline-none text-xs"
                     >
                       <option value="QR">UPI QR Code</option>
                       <option value="CASH">Cash Payment</option>
@@ -1104,13 +1104,13 @@ export default function AdminDashboard() {
 
                   {paymentMethod !== "CASH" && (
                     <div className="space-y-1.5">
-                      <label className="text-[9px] font-bold uppercase tracking-wider text-slate-400">Ref / Txn ID</label>
+                      <label className="text-[9px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Ref / Txn ID</label>
                       <input
                         type="text"
                         value={txnId}
                         onChange={(e) => setTxnId(e.target.value)}
                         placeholder="Txn transaction ref"
-                        className="w-full px-3.5 py-2 bg-slate-950/50 border border-slate-800 focus:border-amber-500 rounded-xl text-white outline-none text-xs"
+                        className="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 focus:border-amber-500 rounded-lg text-slate-900 dark:text-white outline-none text-xs"
                       />
                     </div>
                   )}
@@ -1119,14 +1119,14 @@ export default function AdminDashboard() {
                     <button
                       onClick={handleAdminInitiateQR}
                       disabled={actionLoading || !studentId || !paymentAmount}
-                      className="flex-1 py-2.5 bg-slate-850 hover:bg-slate-800 border border-slate-800 rounded-xl text-[10px] font-bold cursor-pointer"
+                      className="flex-1 py-2.5 bg-slate-100 dark:bg-slate-850 hover:bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-lg text-[10px] font-bold cursor-pointer"
                     >
                       Show QR
                     </button>
                     <button
                       onClick={handleAdminRecordPayment}
                       disabled={actionLoading || !studentId || !paymentAmount}
-                      className="flex-1 py-2.5 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white rounded-xl text-[10px] font-bold cursor-pointer shadow-md shadow-orange-500/10"
+                      className="flex-1 py-2.5 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white rounded-lg text-[10px] font-bold cursor-pointer shadow-md shadow-orange-500/10"
                     >
                       Record Pay
                     </button>
@@ -1134,8 +1134,8 @@ export default function AdminDashboard() {
 
                   {/* Render QR inside admin panel */}
                   {qrCodeData && (
-                    <div className="border border-slate-850 rounded-xl p-3 bg-slate-950/60 text-center space-y-2.5">
-                      <p className="text-[10px] text-slate-300">Scan QR Code (₹{qrCodeData.amount})</p>
+                    <div className="border border-slate-850 rounded-lg p-3 bg-slate-950/60 text-center space-y-2.5">
+                      <p className="text-[10px] text-slate-700 dark:text-slate-300">Scan QR Code (₹{qrCodeData.amount})</p>
                       <div className="bg-white p-2.5 rounded-lg w-32 h-32 mx-auto">
                         <img src={qrCodeData.qrBase64} alt="UPI QR" className="w-full h-full" />
                       </div>
@@ -1143,7 +1143,7 @@ export default function AdminDashboard() {
                   )}
 
                   {recordedPayment && (
-                    <div className="border border-emerald-500/20 rounded-xl p-3 bg-emerald-500/5 text-center space-y-2">
+                    <div className="border border-emerald-500/20 rounded-lg p-3 bg-emerald-500/5 text-center space-y-2">
                       <p className="text-[10px] text-emerald-400">Payment Logged: {recordedPayment.receiptNumber}</p>
                       <button
                         onClick={() => printReceipt(recordedPayment.id)}
@@ -1156,14 +1156,14 @@ export default function AdminDashboard() {
                 </div>
 
                 {/* Payments Table */}
-                <div className="lg:col-span-2 bg-slate-900/50 border border-slate-800 rounded-2xl p-5 overflow-x-auto">
-                  <h3 className="font-bold text-xs text-slate-200 mb-3">Transaction Registry</h3>
+                <div className="lg:col-span-2 bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-lg p-5 overflow-x-auto">
+                  <h3 className="font-bold text-xs text-slate-800 dark:text-slate-200 mb-3">Transaction Registry</h3>
                   {payments.length === 0 ? (
-                    <div className="text-center py-16 text-slate-500 text-xs">No payment logs recorded yet.</div>
+                    <div className="text-center py-16 text-slate-500 dark:text-slate-500 text-xs">No payment logs recorded yet.</div>
                   ) : (
                     <table className="w-full text-[11px] text-left">
                       <thead>
-                        <tr className="border-b border-slate-800 text-slate-400">
+                        <tr className="border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400">
                           <th className="py-2.5">Receipt No.</th>
                           <th className="py-2.5">Student</th>
                           <th className="py-2.5">Amount</th>
@@ -1176,12 +1176,12 @@ export default function AdminDashboard() {
                       <tbody>
                         {payments.map((p: any) => (
                           <tr key={p.id} className="border-b border-slate-850">
-                            <td className="py-2.5 font-semibold text-white">{p.receiptNumber}</td>
+                            <td className="py-2.5 font-semibold text-slate-900 dark:text-white">{p.receiptNumber}</td>
                             <td className="py-2.5">
-                              <p className="font-medium text-slate-200">{p.student?.name}</p>
-                              <p className="text-[9px] text-slate-500">{p.student?.email}</p>
+                              <p className="font-medium text-slate-800 dark:text-slate-200">{p.student?.name}</p>
+                              <p className="text-[9px] text-slate-500 dark:text-slate-500">{p.student?.email}</p>
                             </td>
-                            <td className="py-2.5 font-bold text-white">₹{p.amount}</td>
+                            <td className="py-2.5 font-bold text-slate-900 dark:text-white">₹{p.amount}</td>
                             <td className="py-2.5">
                               <span className={`px-2 py-0.5 rounded-full text-[8px] font-bold ${p.paymentMethod === "QR" ? "bg-blue-600/10 text-blue-400" : p.paymentMethod === "CASH" ? "bg-amber-600/10 text-amber-400" : "bg-purple-600/10 text-purple-400"}`}>
                                 {p.paymentMethod}
@@ -1192,7 +1192,7 @@ export default function AdminDashboard() {
                                 {p.status}
                               </span>
                             </td>
-                            <td className="py-2.5 text-slate-400">{new Date(p.createdAt).toLocaleDateString()}</td>
+                            <td className="py-2.5 text-slate-500 dark:text-slate-400">{new Date(p.createdAt).toLocaleDateString()}</td>
                             <td className="py-2.5 flex items-center gap-2">
                               {p.status === "PENDING" ? (
                                 <>
@@ -1212,7 +1212,7 @@ export default function AdminDashboard() {
                               ) : (
                                 <button
                                   onClick={() => printReceipt(p.id)}
-                                  className="p-1.5 bg-slate-800 hover:bg-slate-750 rounded text-slate-300 hover:text-white cursor-pointer"
+                                  className="p-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-750 rounded text-slate-700 dark:text-slate-300 hover:text-white cursor-pointer"
                                   title="Download invoice"
                                 >
                                   <Download className="w-3 h-3" />
@@ -1231,18 +1231,18 @@ export default function AdminDashboard() {
 
           {!isLoading && activeTab === "attendance" && (
             <div className="space-y-6">
-              <div className="border-b border-slate-800 pb-4">
+              <div className="border-b border-slate-200 dark:border-slate-800 pb-4">
                 <h2 className="text-xl font-bold">Staff Attendance Auditor</h2>
-                <p className="text-xs text-slate-400">View check-in and check-out tracking for all employees</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">View check-in and check-out tracking for all employees</p>
               </div>
 
-              <div className="bg-slate-900/50 border border-slate-800 rounded-2xl p-5 overflow-x-auto">
+              <div className="bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-lg p-5 overflow-x-auto">
                 {attendances.length === 0 ? (
-                  <div className="text-center py-16 text-slate-500 text-xs">No employee attendances recorded.</div>
+                  <div className="text-center py-16 text-slate-500 dark:text-slate-500 text-xs">No employee attendances recorded.</div>
                 ) : (
                   <table className="w-full text-xs text-left">
                     <thead>
-                      <tr className="border-b border-slate-800 text-slate-400">
+                      <tr className="border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400">
                         <th className="py-2.5">Employee Name</th>
                         <th className="py-2.5">Email</th>
                         <th className="py-2.5">Date</th>
@@ -1255,17 +1255,17 @@ export default function AdminDashboard() {
                     <tbody>
                       {attendances.map((log: any) => (
                         <tr key={log.id} className="border-b border-slate-850">
-                          <td className="py-2.5 font-bold text-white">{log.employee?.name}</td>
-                          <td className="py-2.5 text-slate-400">{log.employee?.email}</td>
+                          <td className="py-2.5 font-bold text-slate-900 dark:text-white">{log.employee?.name}</td>
+                          <td className="py-2.5 text-slate-500 dark:text-slate-400">{log.employee?.email}</td>
                           <td className="py-2.5 font-medium">{new Date(log.date).toLocaleDateString()}</td>
                           <td className="py-2.5">
-                            <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold ${log.status === "PRESENT" ? "bg-emerald-500/10 text-emerald-400" : log.status === "LATE" ? "bg-amber-500/10 text-amber-400" : "bg-slate-500/10 text-slate-400"}`}>
+                            <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold ${log.status === "PRESENT" ? "bg-emerald-500/10 text-emerald-400" : log.status === "LATE" ? "bg-amber-500/10 text-amber-400" : "bg-slate-500/10 text-slate-500 dark:text-slate-400"}`}>
                               {log.status}
                             </span>
                           </td>
                           <td className="py-2.5">{log.checkInTime ? new Date(log.checkInTime).toLocaleTimeString() : "-"}</td>
                           <td className="py-2.5">{log.checkOutTime ? new Date(log.checkOutTime).toLocaleTimeString() : "-"}</td>
-                          <td className="py-2.5 text-slate-400 italic">{log.notes || "-"}</td>
+                          <td className="py-2.5 text-slate-500 dark:text-slate-400 italic">{log.notes || "-"}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -1298,3 +1298,5 @@ export default function AdminDashboard() {
     </div>
   );
 }
+
+export default AdminDashboard;

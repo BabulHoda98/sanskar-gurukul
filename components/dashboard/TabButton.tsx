@@ -19,10 +19,10 @@ export function TabButton({ id, label, icon: Icon, isActive, onClick, themeColor
   return (
     <button
       onClick={onClick}
-      className={`flex items-center gap-2 px-5 py-3 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+      className={`flex items-center gap-2 px-5 py-3 rounded-lg text-xs font-bold transition-all cursor-pointer ${
         isActive 
           ? activeClass 
-          : "text-slate-400 hover:text-slate-200 hover:bg-slate-900"
+          : "text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:text-slate-200 hover:bg-white dark:bg-slate-900"
       }`}
     >
       <Icon className="w-4 h-4" />

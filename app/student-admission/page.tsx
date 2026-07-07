@@ -14,7 +14,7 @@ import {
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import api, { API_URL } from "@/lib/api";
 
-export default function StudentAdmissionPage() {
+function StudentAdmissionPage() {
   const router = useRouter();
   const [token, setToken] = useState("");
   const [currentUser, setCurrentUser] = useState<any>(null);
@@ -900,3 +900,5 @@ Thank you for choosing Gurukul!`;
     </div>
   );
 }
+
+export default StudentAdmissionPage;

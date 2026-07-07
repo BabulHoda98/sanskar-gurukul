@@ -13,7 +13,7 @@ import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { TabButton } from "@/components/dashboard/TabButton";
 import api, { API_URL } from "@/lib/api";
 
-export default function EmployeeDashboard() {
+function EmployeeDashboard() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("inquiries"); // inquiries, payments, attendance, addEmployee
   const [token, setToken] = useState("");
@@ -867,3 +867,5 @@ export default function EmployeeDashboard() {
     </div>
   );
 }
+
+export default EmployeeDashboard;

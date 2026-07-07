@@ -13,7 +13,7 @@ import { AddonRow } from "@/components/fees/AddonRow";
 import { FeeCalculator } from "@/components/fees/FeeCalculator";
 import api from "@/lib/api";
 
-export default function FeeStructurePage() {
+function FeeStructurePage() {
   const [feesConfig, setFeesConfig] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [billingCycle, setBillingCycle] = useState<"ANNUAL" | "MONTHLY">("ANNUAL");
@@ -222,3 +222,5 @@ export default function FeeStructurePage() {
     </div>
   );
 }
+
+export default FeeStructurePage;

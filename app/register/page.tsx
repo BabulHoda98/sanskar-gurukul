@@ -7,7 +7,7 @@ import { School, User, Phone, Mail, MapPin, FileDigit, FileText, Lock, Loader2, 
 
 import api from "@/lib/api";
 
-export default function RegisterPage() {
+function RegisterPage() {
   const router = useRouter();
   const [formData, setFormData] = useState({
     name: "",
@@ -309,3 +309,5 @@ export default function RegisterPage() {
     </div>
   );
 }
+
+export default RegisterPage;
