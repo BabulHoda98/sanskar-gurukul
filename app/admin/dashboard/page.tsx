@@ -7,8 +7,9 @@ import { motion } from "framer-motion";
 import {
   User, Users, DollarSign, Clock, ShieldAlert, GraduationCap, PlusCircle,
   Search, Download, QrCode, ClipboardList, CheckCircle, ArrowUpRight, LogOut, Loader2, UserPlus, Upload, Calculator, Settings, Edit,
-  Phone, Mail, MapPin, FileText, MessageSquare
+  Phone, Mail, MapPin, FileText, MessageSquare, LineChart
 } from "lucide-react";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { TabButton } from "@/components/dashboard/TabButton";
@@ -16,9 +17,26 @@ import { AdminRolesTab } from "@/components/dashboard/AdminRolesTab";
 import { AdminFeesSettingsTab } from "@/components/dashboard/AdminFeesSettingsTab";
 import api, { API_URL } from "@/lib/api";
 
+const StatsWidget = ({ title, daily, monthly, yearly, prefix = "" }: { title: string, daily: number | string, monthly: number | string, yearly: number | string, prefix?: string }) => (
+  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+    <div className="bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 p-4 rounded-lg text-center">
+      <p className="text-[10px] uppercase font-bold text-slate-500">Today's {title}</p>
+      <p className="text-xl font-bold text-slate-900 dark:text-white mt-1">{prefix}{daily}</p>
+    </div>
+    <div className="bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 p-4 rounded-lg text-center">
+      <p className="text-[10px] uppercase font-bold text-slate-500">This Month's {title}</p>
+      <p className="text-xl font-bold text-amber-600 mt-1">{prefix}{monthly}</p>
+    </div>
+    <div className="bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 p-4 rounded-lg text-center">
+      <p className="text-[10px] uppercase font-bold text-slate-500">This Year's {title}</p>
+      <p className="text-xl font-bold text-emerald-600 mt-1">{prefix}{yearly}</p>
+    </div>
+  </div>
+);
+
 function AdminDashboard() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState("students"); // students, enroll, addEmployee, payments, attendance, roles, feesSettings
+  const [activeTab, setActiveTab] = useState("overview"); // overview, students, enroll, addEmployee, payments, attendance, roles, feesSettings
   const [token, setToken] = useState("");
   const [currentUser, setCurrentUser] = useState<any>(null);
 
@@ -26,6 +44,8 @@ function AdminDashboard() {
   const [students, setStudents] = useState([]);
   const [payments, setPayments] = useState([]);
   const [attendances, setAttendances] = useState([]);
+  const [employees, setEmployees] = useState([]);
+  const [dashboardStats, setDashboardStats] = useState<any>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [paymentFilter, setPaymentFilter] = useState("ALL");
   const [cycleFilter, setCycleFilter] = useState("ALL"); // ALL, MONTHLY, ANNUAL
@@ -87,6 +107,13 @@ function AdminDashboard() {
   const [aadhaarPhoto, setAadhaarPhoto] = useState<File | null>(null);
   const [panPhoto, setPanPhoto] = useState<File | null>(null);
 
+  // Admin Mark Attendance Form State
+  const [attendanceForm, setAttendanceForm] = useState({
+    employeeId: "",
+    status: "PRESENT",
+    notes: ""
+  });
+
   const [isLoading, setIsLoading] = useState(false);
   const [actionLoading, setActionLoading] = useState(false);
 
@@ -118,9 +145,12 @@ function AdminDashboard() {
   // Fetch Tab Specific Data
   useEffect(() => {
     if (!token) return;
+    if (activeTab === "overview") {
+      fetchDashboardStats();
+    }
     if (activeTab === "students") fetchStudents();
     if (activeTab === "payments") fetchPayments();
-    if (activeTab === "attendance") fetchAttendances();
+    if (activeTab === "attendance") { fetchAttendances(); fetchEmployees(); }
     if (activeTab === "inquiries") fetchInquiries();
   }, [activeTab, token, paymentFilter]);
 
@@ -236,6 +266,33 @@ function AdminDashboard() {
       console.error(err);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  // Fetch Dashboard Stats from API
+  const fetchDashboardStats = async () => {
+    setIsLoading(true);
+    try {
+      const response = await api.get("/api/admin/dashboard-stats", {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setDashboardStats(response.data);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Fetch Employees List for Dropdowns
+  const fetchEmployees = async () => {
+    try {
+      const response = await api.get("/api/admin/employees", {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setEmployees(response.data.employees);
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -397,6 +454,25 @@ function AdminDashboard() {
     }
   };
 
+  // 8.5 Admin Mark Attendance
+  const handleMarkAttendance = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setActionLoading(true);
+    try {
+      await api.post("/api/admin/attendance", attendanceForm, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      toast.success("Attendance marked successfully!");
+      setAttendanceForm({ employeeId: "", status: "PRESENT", notes: "" });
+      fetchAttendances();
+    } catch (err: any) {
+      console.error(err);
+      toast.error(err.response?.data?.message || "Failed to mark attendance.");
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
   // 9. Update Fees Configuration
   const handleUpdateFeesConfig = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -503,6 +579,7 @@ function AdminDashboard() {
         {/* Reusable Navigation Tabs */}
         <div className="flex flex-wrap gap-2 mb-2 bg-white/80 dark:bg-slate-900/40 p-1.5 border border-slate-200 dark:border-slate-800 rounded-lg">
           {[
+            { id: "overview", label: "Dashboard Overview", icon: LineChart },
             { id: "students", label: "Student Ledger", icon: Users },
             { id: "inquiries", label: "Admission Inquiries", icon: FileText },
             { id: "enroll", label: "Enroll Student", icon: PlusCircle },
@@ -552,6 +629,43 @@ function AdminDashboard() {
                   </div>
                 </div>
               ))}
+            </div>
+          )}
+
+          {!isLoading && activeTab === "overview" && (
+            <div className="space-y-6">
+              <div className="flex justify-between items-center pb-4 border-b border-slate-200 dark:border-slate-800">
+                <div>
+                  <h2 className="text-xl font-bold">Dashboard Overview</h2>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">High-level summary of enrollments, revenue, and attendance</p>
+                </div>
+              </div>
+              
+              <div className="space-y-4">
+                <StatsWidget title="Enrollments" daily={dashboardStats?.students?.daily || 0} monthly={dashboardStats?.students?.monthly || 0} yearly={dashboardStats?.students?.yearly || 0} />
+                <StatsWidget title="Revenue" prefix="₹" daily={(dashboardStats?.revenue?.daily || 0).toLocaleString()} monthly={(dashboardStats?.revenue?.monthly || 0).toLocaleString()} yearly={(dashboardStats?.revenue?.yearly || 0).toLocaleString()} />
+                <StatsWidget title="Present Staff" daily={dashboardStats?.attendance?.daily || 0} monthly={dashboardStats?.attendance?.monthly || 0} yearly={dashboardStats?.attendance?.yearly || 0} />
+              </div>
+
+              <div className="bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-lg p-6 mt-8">
+                <h3 className="font-bold text-sm text-slate-900 dark:text-white mb-6">Monthly Revenue Graph ({new Date().getFullYear()})</h3>
+                <div className="h-72 w-full">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={dashboardStats?.graphData || []}>
+                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#334155" opacity={0.2} />
+                      <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: "#64748b" }} dy={10} />
+                      <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: "#64748b" }} tickFormatter={(value) => `₹${value}`} dx={-10} />
+                      <Tooltip
+                        cursor={{ fill: '#f1f5f9', opacity: 0.1 }}
+                        contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '8px', fontSize: '12px', color: '#fff' }}
+                        itemStyle={{ color: '#fbbf24', fontWeight: 'bold' }}
+                        formatter={(value: any) => [`₹${value.toLocaleString()}`, "Revenue"]}
+                      />
+                      <Bar dataKey="revenue" fill="#fbbf24" radius={[4, 4, 0, 0]} maxBarSize={50} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
             </div>
           )}
 
@@ -1256,7 +1370,59 @@ function AdminDashboard() {
             <div className="space-y-6">
               <div className="border-b border-slate-200 dark:border-slate-800 pb-4">
                 <h2 className="text-xl font-bold">Staff Attendance Auditor</h2>
-                <p className="text-xs text-slate-500 dark:text-slate-400">View check-in and check-out tracking for all employees</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">View check-in and check-out tracking for all employees, and mark attendance manually.</p>
+              </div>
+
+              {/* Admin Attendance Marker Form */}
+              <div className="bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-lg p-5">
+                <h3 className="font-bold text-xs text-slate-800 dark:text-slate-200 mb-3">Mark Staff Attendance</h3>
+                <form onSubmit={handleMarkAttendance} className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+                  <div className="space-y-1.5">
+                    <label className="text-[9px] font-bold uppercase tracking-wider text-slate-500">Employee Name / Email</label>
+                    <select
+                      required
+                      value={attendanceForm.employeeId}
+                      onChange={(e) => setAttendanceForm({ ...attendanceForm, employeeId: e.target.value })}
+                      className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 focus:border-amber-500 rounded-lg text-xs outline-none"
+                    >
+                      <option value="" disabled>Select Employee...</option>
+                      {employees.map((emp: any) => (
+                        <option key={emp.id} value={emp.id}>
+                          {emp.name} ({emp.email})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-[9px] font-bold uppercase tracking-wider text-slate-500">Status</label>
+                    <select
+                      value={attendanceForm.status}
+                      onChange={(e) => setAttendanceForm({ ...attendanceForm, status: e.target.value })}
+                      className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 focus:border-amber-500 rounded-lg text-xs outline-none"
+                    >
+                      <option value="PRESENT">PRESENT</option>
+                      <option value="ABSENT">ABSENT</option>
+                      <option value="LEAVE">LEAVE</option>
+                      <option value="LATE">LATE</option>
+                    </select>
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-[9px] font-bold uppercase tracking-wider text-slate-500">Notes (Optional)</label>
+                    <input
+                      type="text"
+                      value={attendanceForm.notes}
+                      onChange={(e) => setAttendanceForm({ ...attendanceForm, notes: e.target.value })}
+                      placeholder="Reason for absence..."
+                      className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 focus:border-amber-500 rounded-lg text-xs outline-none"
+                    />
+                  </div>
+                  <button
+                    type="submit" disabled={actionLoading}
+                    className="w-full py-2 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 text-white rounded-lg text-xs font-bold shadow cursor-pointer flex justify-center items-center"
+                  >
+                    {actionLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : "Mark Record"}
+                  </button>
+                </form>
               </div>
 
               <div className="bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-lg p-5 overflow-x-auto">
@@ -1278,7 +1444,10 @@ function AdminDashboard() {
                     <tbody>
                       {attendances.map((log: any) => (
                         <tr key={log.id} className="border-b border-slate-850">
-                          <td className="py-2.5 font-bold text-slate-900 dark:text-white">{log.employee?.name}</td>
+                          <td className="py-2.5">
+                            <p className="font-bold text-slate-900 dark:text-white">{log.employee?.name}</p>
+                            <p className="text-[9px] font-mono text-slate-500 mt-0.5 select-all">ID: {log.employee?.id}</p>
+                          </td>
                           <td className="py-2.5 text-slate-500 dark:text-slate-400">{log.employee?.email}</td>
                           <td className="py-2.5 font-medium">{new Date(log.date).toLocaleDateString()}</td>
                           <td className="py-2.5">
