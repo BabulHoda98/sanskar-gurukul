@@ -22,7 +22,7 @@ function Hero() {
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
-    <div className="relative h-[50vh] sm:h-[60vh] md:h-[80vh] lg:h-[90vh] flex items-center justify-center overflow-hidden bg-gray-900">
+    <div className="relative min-h-[70vh] sm:min-h-[60vh] md:h-[80vh] lg:h-[90vh] py-20 flex items-center justify-center overflow-hidden bg-gray-900">
       {/* Sliding Background Images */}
       <div className="absolute inset-0 z-0">
         <Swiper
@@ -30,7 +30,11 @@ function Hero() {
           autoplay={{ delay: 5000, disableOnInteraction: false, pauseOnMouseEnter: true }}
           loop={true}
           speed={1500}
-          onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
+          onSlideChange={(swiper) => {
+            if (activeIndex !== swiper.realIndex) {
+              setActiveIndex(swiper.realIndex);
+            }
+          }}
           className="w-full h-full"
         >
           {HERO_IMAGES.map((img, index) => (
@@ -65,7 +69,7 @@ function Hero() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
-                className="-mt-16 sm:-mt-24 md:-mt-32"
+                className="-mt-12 sm:-mt-16 md:-mt-24"
               >
                 <span className="inline-block py-1 px-3 rounded-full bg-primary/40 text-accent-foreground border border-accent/50 text-sm font-medium tracking-wider mb-6 backdrop-blur-sm">
                   CBSE Pattern • Nursery to Class VIII

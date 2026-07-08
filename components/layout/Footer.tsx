@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { MapPin, Phone, Mail } from "lucide-react";
-import { FaFacebook, FaTwitter, FaInstagram, FaYoutube } from "react-icons/fa";
+import { FaFacebook, FaTwitter, FaInstagram, FaYoutube, FaWhatsapp } from "react-icons/fa";
 
 export function Footer() {
   const pathname = usePathname();
@@ -45,6 +45,9 @@ export function Footer() {
               </Link>
               <Link href="#" className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:bg-accent hover:border-accent hover:text-primary transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-accent/20">
                 <FaYoutube className="w-4 h-4" />
+              </Link>
+              <Link href="https://wa.me/918409696021" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:bg-[#25D366] hover:border-[#25D366] hover:text-white transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-[#25D366]/20">
+                <FaWhatsapp className="w-4 h-4" />
               </Link>
             </div>
           </div>
@@ -96,6 +99,14 @@ export function Footer() {
                   <Phone className="w-5 h-5 text-accent group-hover:text-white transition-colors" />
                 </div>
                 <span className="text-sm text-gray-400">+91 8409696021</span>
+              </li>
+              <li className="flex items-center group cursor-pointer">
+                <Link href="https://wa.me/918409696021" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 w-full">
+                  <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 group-hover:bg-[#25D366] transition-colors">
+                    <FaWhatsapp className="w-5 h-5 text-accent group-hover:text-white transition-colors" />
+                  </div>
+                  <span className="text-sm text-gray-400 group-hover:text-[#25D366] transition-colors">WhatsApp Us</span>
+                </Link>
               </li>
               <li className="flex items-center gap-4 group">
                 <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 group-hover:bg-accent transition-colors">
