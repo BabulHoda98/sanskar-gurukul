@@ -49,6 +49,13 @@ function RegisterPage() {
       return;
     }
 
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!passwordRegex.test(formData.password)) {
+      setError("Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.");
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const data = new FormData();
       data.append("name", formData.name);
@@ -74,7 +81,7 @@ function RegisterPage() {
       }, 2000);
     } catch (err: any) {
       console.error(err);
-      setError(err.message || "An error occurred during registration.");
+      setError(err.response?.data?.message || err.message || "An error occurred during registration.");
     } finally {
       setIsLoading(false);
     }
