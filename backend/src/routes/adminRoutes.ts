@@ -5,7 +5,9 @@ import {
   getAllStudents, 
   getStudentFees, 
   getAllPayments, 
-  getAllAttendances 
+  getAllAttendances,
+  getDashboardStats,
+  getAllEmployees
 } from '../controllers/adminController';
 import { addEmployee } from '../controllers/employeeController';
 import { recordPayment, initiateQRPayment, updatePaymentStatus } from '../controllers/paymentController';
@@ -38,6 +40,12 @@ router.put('/payments/:paymentId/status', updatePaymentStatus);
 
 // Attendance logs for all employees
 router.get('/attendance', getAllAttendances);
+
+// Dashboard Statistics
+router.get('/dashboard-stats', getDashboardStats);
+
+// Get all employees
+router.get('/employees', getAllEmployees);
 
 // Fees Configuration
 router.post('/fees-config', updateFeesConfig);

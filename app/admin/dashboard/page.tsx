@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 import {
   User, Users, DollarSign, Clock, ShieldAlert, GraduationCap, PlusCircle,
   Search, Download, QrCode, ClipboardList, CheckCircle, ArrowUpRight, LogOut, Loader2, UserPlus, Upload, Calculator, Settings, Edit,
-  Phone, Mail, MapPin, FileText, MessageSquare, LineChart
+  Phone, Mail, MapPin, FileText, MessageSquare, LineChart, X
 } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
@@ -722,9 +722,19 @@ function AdminDashboard() {
                   <div className="bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-lg p-6 h-fit">
                     {selectedInquiry ? (
                       <form onSubmit={handleInquiryFeedback} className="space-y-5">
-                        <h3 className="font-bold text-sm text-slate-900 dark:text-white border-b border-slate-200 dark:border-slate-800 pb-3">
-                          Record Feedback: {selectedInquiry.studentName}
-                        </h3>
+                        <div className="flex justify-between items-center border-b border-slate-200 dark:border-slate-800 pb-3">
+                          <h3 className="font-bold text-sm text-slate-900 dark:text-white">
+                            Record Feedback: {selectedInquiry.studentName}
+                          </h3>
+                          <button
+                            type="button"
+                            onClick={() => setSelectedInquiry(null)}
+                            className="p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-colors cursor-pointer"
+                            aria-label="Close"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
+                        </div>
 
                         <div className="space-y-1.5">
                           <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Feedback Status</label>

@@ -1,14 +1,13 @@
 import { Router } from 'express';
-import {
-  assignRole,
-  addStudent,
-  getAllStudents,
-  getStudentFees,
-  getAllPayments,
+import { 
+  assignRole, 
+  addStudent, 
+  getAllStudents, 
+  getStudentFees, 
+  getAllPayments, 
   getAllAttendances,
-  markEmployeeAttendance,
-  getAllEmployees,
-  getDashboardStats
+  getDashboardStats,
+  getAllEmployees
 } from '../controllers/adminController';
 import { addEmployee } from '../controllers/employeeController';
 import { recordPayment, initiateQRPayment, updatePaymentStatus } from '../controllers/paymentController';
@@ -22,9 +21,6 @@ const router = Router();
 router.use(protect);
 router.use(restrictTo('ADMIN'));
 
-// Dashboard Analytics
-router.get('/dashboard-stats', getDashboardStats);
-
 // Role Assignment
 router.put('/assign-role', assignRole);
 
@@ -35,7 +31,6 @@ router.get('/students/:id/fees', getStudentFees);
 
 // Employee Management (Admin can add employee)
 router.post('/employees', registrationUpload, addEmployee);
-router.get('/employees', getAllEmployees);
 
 // Payments management
 router.get('/payments', getAllPayments);
@@ -45,7 +40,12 @@ router.put('/payments/:paymentId/status', updatePaymentStatus);
 
 // Attendance logs for all employees
 router.get('/attendance', getAllAttendances);
-router.post('/attendance', markEmployeeAttendance);
+
+// Dashboard Statistics
+router.get('/dashboard-stats', getDashboardStats);
+
+// Get all employees
+router.get('/employees', getAllEmployees);
 
 // Fees Configuration
 router.post('/fees-config', updateFeesConfig);

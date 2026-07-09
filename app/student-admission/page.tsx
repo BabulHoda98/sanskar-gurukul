@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  GraduationCap, User, Phone, Mail, FileDigit, Building, 
+import {
+  GraduationCap, User, Phone, Mail, FileDigit, Building,
   MapPin, ShieldAlert, ArrowLeft, Loader2, CheckCircle, Calculator, Info,
   QrCode, Landmark, DollarSign, Download, Upload, CheckCircle2, AlertCircle, X,
   MessageSquare
@@ -45,6 +45,8 @@ function StudentAdmissionPage() {
   });
 
   const [studentPhoto, setStudentPhoto] = useState<File | null>(null);
+  const [fatherAadharFile, setFatherAadharFile] = useState<File | null>(null);
+  const [motherAadharFile, setMotherAadharFile] = useState<File | null>(null);
 
   // Service Options State
   const [services, setServices] = useState({
@@ -111,7 +113,16 @@ function StudentAdmissionPage() {
   const totalFees = classFee + transportFee + dressFee + booksFee;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setStudentForm({ ...studentForm, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+
+    if (name === "studentAadhaar" || name === "fatherAadhar" || name === "motherAadhar") {
+      const onlyNums = value.replace(/[^0-9]/g, "");
+      if (onlyNums.length > 12) return;
+      setStudentForm({ ...studentForm, [name]: onlyNums });
+      return;
+    }
+
+    setStudentForm({ ...studentForm, [name]: value });
   };
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -169,6 +180,12 @@ function StudentAdmissionPage() {
       if (studentPhoto) {
         data.append("photo", studentPhoto);
       }
+      if (fatherAadharFile) {
+        data.append("fatherAadharFile", fatherAadharFile);
+      }
+      if (motherAadharFile) {
+        data.append("motherAadharFile", motherAadharFile);
+      }
 
       const response = await api.post("/api/admin/students", data, {
         headers: {
@@ -207,6 +224,8 @@ function StudentAdmissionPage() {
           paymentCycle: "ANNUAL"
         });
         setStudentPhoto(null);
+        setFatherAadharFile(null);
+        setMotherAadharFile(null);
         setServices({ transport: false, dress: false, books: false });
       } else {
         toast.error(resData.message || "Failed to submit student admission.");
@@ -353,7 +372,7 @@ Thank you for choosing Gurukul!`;
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 pb-20 relative overflow-x-hidden">
-      
+
       {/* Reusable Console Header */}
       <DashboardHeader
         consoleTitle="Gurukul Admission & Fees Portal"
@@ -365,7 +384,7 @@ Thank you for choosing Gurukul!`;
 
       <div className="w-full mx-auto px-0 mt-0">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-2">
-          
+
           {/* Main Form Fields */}
           <div className="lg:col-span-2 space-y-6">
             <motion.div
@@ -446,12 +465,35 @@ Thank you for choosing Gurukul!`;
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Student Photo</label>
-                      <input
-                        type="file" accept="image/*"
-                        onChange={(e) => { if (e.target.files) setStudentPhoto(e.target.files[0]); }}
-                        className="w-full text-xs text-slate-500 dark:text-slate-400 file:mr-3 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-[10px] file:font-bold file:uppercase file:tracking-wider file:bg-slate-100 dark:bg-slate-800 file:text-slate-800 dark:text-slate-200 file:cursor-pointer"
-                      />
+                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">User's Profile</label>
+                      <div className="flex flex-row items-center gap-3">
+                        <div className="w-10 h-10 shrink-0 bg-[radial-gradient(circle_at_center,_#ffffff_0%,_#e5e7eb_100%)] dark:bg-[radial-gradient(circle_at_center,_#334155_0%,_#0f172a_100%)] flex items-center justify-center overflow-hidden border border-slate-200 dark:border-slate-800 rounded">
+                          {studentPhoto ? (
+                            <img src={URL.createObjectURL(studentPhoto)} alt="Profile" className="w-full h-full object-cover" />
+                          ) : (
+                            <svg viewBox="0 0 24 24" fill="#4A86B9" className="w-6 h-6 translate-y-0.5">
+                              <path d="M12 12c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm0 2c-3.33 0-10 1.67-10 5v3h20v-3c0-3.33-6.67-5-10-5z" />
+                            </svg>
+                          )}
+                        </div>
+
+                        <div className="flex-1 flex flex-row items-center gap-2">
+                          <input
+                            type="file" accept="image/*"
+                            onChange={(e) => { if (e.target.files) setStudentPhoto(e.target.files[0]); }}
+                            className="block w-full text-[10px] text-slate-900 dark:text-slate-300
+                              file:mr-2 file:py-1 file:px-2
+                              file:border file:border-slate-300 dark:file:border-slate-600
+                              file:text-[10px] file:bg-slate-50 dark:file:bg-slate-800
+                              file:text-slate-900 dark:file:text-slate-200
+                              hover:file:bg-slate-100 dark:hover:file:bg-slate-700
+                              cursor-pointer"
+                          />
+                          <button type="button" className="px-3 py-1 border border-yellow-400 rounded-md text-[10px] text-slate-900 dark:text-slate-100 font-bold hover:bg-yellow-50 dark:hover:bg-yellow-900/20 transition-colors whitespace-nowrap">
+                            Upload
+                          </button>
+                        </div>
+                      </div>
                     </div>
 
                     <div className="space-y-1.5 md:col-span-2">
@@ -549,22 +591,44 @@ Thank you for choosing Gurukul!`;
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Father's Aadhaar Card Number</label>
+                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Father's Aadhaar Card (Optional)</label>
                       <input
                         type="text" name="fatherAadhar" maxLength={12}
                         value={studentForm.fatherAadhar} onChange={handleInputChange}
                         placeholder="12-digit Aadhaar"
                         className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 focus:border-amber-500 rounded-xl text-slate-900 dark:text-white outline-none text-xs"
                       />
+                      <input
+                        type="file" accept="image/*,.pdf"
+                        onChange={(e) => { if (e.target.files) setFatherAadharFile(e.target.files[0]); }}
+                        className="block w-full text-[10px] text-slate-900 dark:text-slate-300 mt-2
+                          file:mr-2 file:py-1 file:px-2
+                          file:border file:border-slate-300 dark:file:border-slate-600
+                          file:text-[10px] file:bg-slate-50 dark:file:bg-slate-800
+                          file:text-slate-900 dark:file:text-slate-200
+                          hover:file:bg-slate-100 dark:hover:file:bg-slate-700
+                          cursor-pointer"
+                      />
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Mother's Aadhaar Card Number</label>
+                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Mother's Aadhaar Card (Optional)</label>
                       <input
                         type="text" name="motherAadhar" maxLength={12}
                         value={studentForm.motherAadhar} onChange={handleInputChange}
                         placeholder="12-digit Aadhaar"
                         className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 focus:border-amber-500 rounded-xl text-slate-900 dark:text-white outline-none text-xs"
+                      />
+                      <input
+                        type="file" accept="image/*,.pdf"
+                        onChange={(e) => { if (e.target.files) setMotherAadharFile(e.target.files[0]); }}
+                        className="block w-full text-[10px] text-slate-900 dark:text-slate-300 mt-2
+                          file:mr-2 file:py-1 file:px-2
+                          file:border file:border-slate-300 dark:file:border-slate-600
+                          file:text-[10px] file:bg-slate-50 dark:file:bg-slate-800
+                          file:text-slate-900 dark:file:text-slate-200
+                          hover:file:bg-slate-100 dark:hover:file:bg-slate-700
+                          cursor-pointer"
                       />
                     </div>
 
@@ -605,18 +669,18 @@ Thank you for choosing Gurukul!`;
 
           {/* Pricing Config / Live Calculator Panel */}
           <div className="lg:col-span-1 space-y-6">
-            
+
             {/* 1. Live Calculator */}
             <div className="bg-white dark:bg-slate-900/50 border-y md:border border-slate-200 dark:border-slate-800 rounded-lg p-6 space-y-5">
               <h3 className="font-bold text-sm text-slate-800 dark:text-slate-200 flex items-center gap-2">
                 <Calculator className="w-4 h-4 text-amber-500" /> Fees Live Calculator
               </h3>
-              
+
               <div className="space-y-4">
                 {/* Checkboxes */}
                 <div className="bg-slate-50 dark:bg-slate-950/50 border border-slate-100 dark:border-slate-850 p-4 rounded-2xl space-y-3">
                   <p className="text-[10px] font-bold uppercase text-slate-500 dark:text-slate-400 tracking-wide mb-1">Optional Facilities / Add-ons</p>
-                  
+
                   <label className="flex items-center gap-3 cursor-pointer group">
                     <input
                       type="checkbox" name="transport"
@@ -680,7 +744,7 @@ Thank you for choosing Gurukul!`;
                       <span className="font-mono font-bold text-slate-800 dark:text-slate-200">₹{feesConfig.addons.books}</span>
                     </div>
                   )}
-                  
+
                   <div className="flex justify-between items-center text-sm font-bold text-white pt-3 border-t border-dashed border-slate-200 dark:border-slate-800">
                     <span className="text-amber-400 uppercase tracking-wider text-xs">Total Academic Fee:</span>
                     <span className="text-lg text-emerald-400 font-mono">
@@ -705,14 +769,14 @@ Thank you for choosing Gurukul!`;
       <AnimatePresence>
         {showPaymentModal && enrolledStudent && (
           <div className="fixed inset-0 bg-slate-900/40 dark:bg-slate-950/80 backdrop-blur-md flex items-center justify-center z-50 p-4">
-            <motion.div 
+            <motion.div
               className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 md:p-8 w-full max-w-lg shadow-2xl relative"
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
             >
-              
-              <button 
+
+              <button
                 onClick={() => setShowPaymentModal(false)}
                 className="absolute top-4 right-4 p-2 bg-slate-200 dark:bg-slate-850 hover:bg-slate-100 dark:bg-slate-800 rounded-full cursor-pointer text-slate-500 dark:text-slate-400 hover:text-white transition-all"
               >
@@ -734,7 +798,7 @@ Thank you for choosing Gurukul!`;
               {paymentOption === "SELECT" && (
                 <div className="space-y-4">
                   <p className="text-xs text-center text-slate-700 dark:text-slate-300 mb-4">Select the preferred payment method to handle initial academic fees:</p>
-                  
+
                   <div className="grid grid-cols-2 gap-4">
                     <button
                       onClick={handleInitiateCashPayment}
@@ -869,7 +933,7 @@ Thank you for choosing Gurukul!`;
                             >
                               <Download className="w-4 h-4" /> Download PDF Receipt
                             </button>
-                            
+
                             <button
                               onClick={() => sendWhatsAppNotification(false)}
                               className="w-full py-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-750 text-slate-800 dark:text-slate-200 rounded-xl text-xs font-bold cursor-pointer inline-flex items-center justify-center gap-1.5 transition-all border border-slate-750"

@@ -1,6 +1,7 @@
 "use client";
 
 import { GraduationCap, LogOut, ArrowLeft } from "lucide-react";
+import Link from "next/link";
 
 interface DashboardHeaderProps {
   consoleTitle: string;
@@ -38,9 +39,11 @@ export function DashboardHeader({
             <ArrowLeft className="w-5 h-5 text-slate-700 dark:text-slate-300" />
           </button>
         )}
-        <div className={`p-2 bg-gradient-to-tr ${gradientClass} rounded-lg shadow-md`}>
-          <GraduationCap className="w-6 h-6 text-white" />
-        </div>
+        <Link href="/">
+          <div className={`p-2 bg-gradient-to-tr ${gradientClass} rounded-lg shadow-md hover:scale-105 transition-transform cursor-pointer`}>
+            <GraduationCap className="w-6 h-6 text-white" />
+          </div>
+        </Link>
         <div>
           <h1 className="text-lg font-bold">{consoleTitle}</h1>
           {userName && (

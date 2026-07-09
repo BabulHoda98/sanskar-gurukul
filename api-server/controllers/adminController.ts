@@ -215,121 +215,87 @@ export const getAllAttendances = async (req: AuthenticatedRequest, res: Response
   }
 };
 
-// 7. Mark Employee Attendance (Admin)
-export const markEmployeeAttendance = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
-  try {
-    const { employeeId, status, notes } = req.body;
-
-    if (!employeeId || !status || !['PRESENT', 'ABSENT', 'LEAVE', 'LATE'].includes(status)) {
-      res.status(400).json({ message: 'Employee ID and valid status are required.' });
-      return;
-    }
-
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-
-    const existingAttendance = await prisma.attendance.findFirst({
-      where: {
-        employeeId,
-        date: { gte: today, lt: tomorrow }
-      }
-    });
-
-    if (existingAttendance) {
-      const updatedAttendance = await prisma.attendance.update({
-        where: { id: existingAttendance.id },
-        data: { status, notes: notes || existingAttendance.notes }
-      });
-      res.status(200).json({ message: 'Attendance updated successfully', attendance: updatedAttendance });
-      return;
-    }
-
-    const newAttendance = await prisma.attendance.create({
-      data: {
-        employeeId,
-        status,
-        checkInTime: status === 'PRESENT' || status === 'LATE' ? new Date() : null,
-        notes: notes || null,
-        date: today
-      }
-    });
-
-    res.status(201).json({ message: 'Attendance marked successfully', attendance: newAttendance });
-  } catch (error: any) {
-    res.status(500).json({ message: 'Error marking attendance', error: error.message });
-  }
-};
-
-// 8. Get all employees list
-export const getAllEmployees = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
-  try {
-    const employees = await prisma.user.findMany({
-      where: { role: 'EMPLOYEE' },
-      select: { id: true, name: true, email: true }
-    });
-    res.status(200).json({ employees });
-  } catch (error: any) {
-    res.status(500).json({ message: 'Error retrieving employees', error: error.message });
-  }
-};
-
-// 9. Get Dashboard Analytics Stats
+// 7. Get dashboard statistics
 export const getDashboardStats = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const firstDayOfYear = new Date(now.getFullYear(), 0, 1);
 
-    const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-    const firstDayOfYear = new Date(today.getFullYear(), 0, 1);
-
-    // Enrollments
-    const dailyStudents = await prisma.student.count({ where: { createdAt: { gte: today } } });
-    const monthlyStudents = await prisma.student.count({ where: { createdAt: { gte: firstDayOfMonth } } });
-    const yearlyStudents = await prisma.student.count({ where: { createdAt: { gte: firstDayOfYear } } });
-
-    // Revenue
-    const dailyPayments = await prisma.payment.findMany({
-      where: { status: 'COMPLETED', createdAt: { gte: today } }
-    });
-    const monthlyPayments = await prisma.payment.findMany({
-      where: { status: 'COMPLETED', createdAt: { gte: firstDayOfMonth } }
-    });
-    const yearlyPayments = await prisma.payment.findMany({
-      where: { status: 'COMPLETED', createdAt: { gte: firstDayOfYear } }
+    const payments = await prisma.payment.findMany({
+      where: { status: 'COMPLETED' },
+      select: { amount: true, createdAt: true }
     });
 
-    const sumDaily = dailyPayments.reduce((acc: number, p: any) => acc + (Number(p.amount) || 0), 0);
-    const sumMonthly = monthlyPayments.reduce((acc: number, p: any) => acc + (Number(p.amount) || 0), 0);
-    const sumYearly = yearlyPayments.reduce((acc: number, p: any) => acc + (Number(p.amount) || 0), 0);
+    let revenueDaily = 0, revenueMonthly = 0, revenueYearly = 0;
+    const monthlyRevenueMap = new Array(12).fill(0);
 
-    // Attendance
-    const dailyAttendance = await prisma.attendance.count({ where: { status: 'PRESENT', date: { gte: today } } });
-    const monthlyAttendance = await prisma.attendance.count({ where: { status: 'PRESENT', date: { gte: firstDayOfMonth } } });
-    const yearlyAttendance = await prisma.attendance.count({ where: { status: 'PRESENT', date: { gte: firstDayOfYear } } });
+    payments.forEach(p => {
+      const pDate = new Date(p.createdAt);
+      const amt = p.amount;
+      if (pDate >= today) revenueDaily += amt;
+      if (pDate >= firstDayOfMonth) revenueMonthly += amt;
+      if (pDate >= firstDayOfYear) {
+        revenueYearly += amt;
+        monthlyRevenueMap[pDate.getMonth()] += amt;
+      }
+    });
 
-    // Graph Data
-    const monthlyRevenue = [];
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    for (let i = 0; i < 12; i++) {
-      const startOfMonth = new Date(today.getFullYear(), i, 1);
-      const endOfMonth = new Date(today.getFullYear(), i + 1, 1);
-      
-      const paymentsInMonth = await prisma.payment.findMany({
-        where: { status: 'COMPLETED', createdAt: { gte: startOfMonth, lt: endOfMonth } }
-      });
-      const monthSum = paymentsInMonth.reduce((acc: number, p: any) => acc + (Number(p.amount) || 0), 0);
-      monthlyRevenue.push({ name: months[i], revenue: monthSum });
-    }
+    const graphData = [
+      "Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ].map((name, index) => ({
+      name,
+      revenue: monthlyRevenueMap[index]
+    }));
+
+    const students = await prisma.student.findMany({
+      select: { createdAt: true }
+    });
+
+    let studentsDaily = 0, studentsMonthly = 0, studentsYearly = 0;
+    students.forEach(s => {
+      const sDate = new Date(s.createdAt);
+      if (sDate >= today) studentsDaily++;
+      if (sDate >= firstDayOfMonth) studentsMonthly++;
+      if (sDate >= firstDayOfYear) studentsYearly++;
+    });
+
+    const presentToday = await prisma.attendance.count({
+      where: { date: { gte: today }, status: 'PRESENT' }
+    });
+
+    const presentThisMonth = await prisma.attendance.count({
+      where: { date: { gte: firstDayOfMonth }, status: 'PRESENT' }
+    });
+
+    const presentThisYear = await prisma.attendance.count({
+      where: { date: { gte: firstDayOfYear }, status: 'PRESENT' }
+    });
 
     res.status(200).json({
-      students: { daily: dailyStudents, monthly: monthlyStudents, yearly: yearlyStudents },
-      revenue: { daily: sumDaily, monthly: sumMonthly, yearly: sumYearly },
-      attendance: { daily: dailyAttendance, monthly: monthlyAttendance, yearly: yearlyAttendance },
-      graphData: monthlyRevenue
+      revenue: { daily: revenueDaily, monthly: revenueMonthly, yearly: revenueYearly },
+      students: { daily: studentsDaily, monthly: studentsMonthly, yearly: studentsYearly },
+      attendance: { daily: presentToday, monthly: presentThisMonth, yearly: presentThisYear },
+      graphData
     });
   } catch (error: any) {
     res.status(500).json({ message: 'Error fetching stats', error: error.message });
+  }
+};
+
+// 8. Get all employees
+export const getAllEmployees = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+  try {
+    const employees = await prisma.user.findMany({
+      where: { role: { in: ['ADMIN', 'EMPLOYEE'] } },
+      select: { id: true, name: true, email: true, role: true, mobile: true },
+      orderBy: { name: 'asc' }
+    });
+
+    res.status(200).json({ employees });
+  } catch (error: any) {
+    res.status(500).json({ message: 'Error retrieving employees', error: error.message });
   }
 };

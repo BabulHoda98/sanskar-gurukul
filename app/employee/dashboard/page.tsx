@@ -6,7 +6,7 @@ import { toast } from "react-hot-toast";
 import { motion } from "framer-motion";
 import { 
   User, Phone, Mail, FileText, CheckCircle, XCircle, LogOut,
-  Calendar, Clock, UserPlus, QrCode, CreditCard, DollarSign, Download, Plus, MapPin, ClipboardList, Loader2, GraduationCap
+  Calendar, Clock, UserPlus, QrCode, CreditCard, DollarSign, Download, Plus, MapPin, ClipboardList, Loader2, GraduationCap, X
 } from "lucide-react";
 
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
@@ -396,9 +396,19 @@ function EmployeeDashboard() {
                   <div className="bg-slate-900/50 border border-slate-800 rounded-2xl p-6 h-fit">
                     {selectedInquiry ? (
                       <form onSubmit={handleInquiryFeedback} className="space-y-5">
-                        <h3 className="font-bold text-sm text-white border-b border-slate-800 pb-3">
-                          Record Feedback: {selectedInquiry.studentName}
-                        </h3>
+                        <div className="flex justify-between items-center border-b border-slate-800 pb-3">
+                          <h3 className="font-bold text-sm text-white">
+                            Record Feedback: {selectedInquiry.studentName}
+                          </h3>
+                          <button
+                            type="button"
+                            onClick={() => setSelectedInquiry(null)}
+                            className="p-1 rounded hover:bg-slate-800 text-slate-400 hover:text-slate-200 transition-colors cursor-pointer"
+                            aria-label="Close"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
+                        </div>
 
                         <div className="space-y-1.5">
                           <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Feedback Status</label>

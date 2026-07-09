@@ -214,3 +214,88 @@ export const getAllAttendances = async (req: AuthenticatedRequest, res: Response
     res.status(500).json({ message: 'Error retrieving employee attendance logs', error: error.message });
   }
 };
+
+// 7. Get dashboard statistics
+export const getDashboardStats = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+  try {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const firstDayOfYear = new Date(now.getFullYear(), 0, 1);
+
+    const payments = await prisma.payment.findMany({
+      where: { status: 'COMPLETED' },
+      select: { amount: true, createdAt: true }
+    });
+
+    let revenueDaily = 0, revenueMonthly = 0, revenueYearly = 0;
+    const monthlyRevenueMap = new Array(12).fill(0);
+
+    payments.forEach(p => {
+      const pDate = new Date(p.createdAt);
+      const amt = p.amount;
+      if (pDate >= today) revenueDaily += amt;
+      if (pDate >= firstDayOfMonth) revenueMonthly += amt;
+      if (pDate >= firstDayOfYear) {
+        revenueYearly += amt;
+        monthlyRevenueMap[pDate.getMonth()] += amt;
+      }
+    });
+
+    const graphData = [
+      "Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ].map((name, index) => ({
+      name,
+      revenue: monthlyRevenueMap[index]
+    }));
+
+    const students = await prisma.student.findMany({
+      select: { createdAt: true }
+    });
+
+    let studentsDaily = 0, studentsMonthly = 0, studentsYearly = 0;
+    students.forEach(s => {
+      const sDate = new Date(s.createdAt);
+      if (sDate >= today) studentsDaily++;
+      if (sDate >= firstDayOfMonth) studentsMonthly++;
+      if (sDate >= firstDayOfYear) studentsYearly++;
+    });
+
+    const presentToday = await prisma.attendance.count({
+      where: { date: { gte: today }, status: 'PRESENT' }
+    });
+
+    const presentThisMonth = await prisma.attendance.count({
+      where: { date: { gte: firstDayOfMonth }, status: 'PRESENT' }
+    });
+
+    const presentThisYear = await prisma.attendance.count({
+      where: { date: { gte: firstDayOfYear }, status: 'PRESENT' }
+    });
+
+    res.status(200).json({
+      revenue: { daily: revenueDaily, monthly: revenueMonthly, yearly: revenueYearly },
+      students: { daily: studentsDaily, monthly: studentsMonthly, yearly: studentsYearly },
+      attendance: { daily: presentToday, monthly: presentThisMonth, yearly: presentThisYear },
+      graphData
+    });
+  } catch (error: any) {
+    res.status(500).json({ message: 'Error fetching stats', error: error.message });
+  }
+};
+
+// 8. Get all employees
+export const getAllEmployees = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+  try {
+    const employees = await prisma.user.findMany({
+      where: { role: { in: ['ADMIN', 'EMPLOYEE'] } },
+      select: { id: true, name: true, email: true, role: true, mobile: true },
+      orderBy: { name: 'asc' }
+    });
+
+    res.status(200).json({ employees });
+  } catch (error: any) {
+    res.status(500).json({ message: 'Error retrieving employees', error: error.message });
+  }
+};
