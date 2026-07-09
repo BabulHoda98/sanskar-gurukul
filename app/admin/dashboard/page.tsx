@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 import {
   User, Users, DollarSign, Clock, ShieldAlert, GraduationCap, PlusCircle,
   Search, Download, QrCode, ClipboardList, CheckCircle, ArrowUpRight, LogOut, Loader2, UserPlus, Upload, Calculator, Settings, Edit,
-  Phone, Mail, MapPin, FileText, MessageSquare, LineChart, X
+  Phone, Mail, MapPin, FileText, MessageSquare, LineChart, X, ArrowUpDown, ArrowUp, ArrowDown
 } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
@@ -101,11 +101,12 @@ function AdminDashboard() {
 
   // Add Employee Form State
   const [empForm, setEmpForm] = useState({
-    name: "", email: "", password: "", mobile: "", address: "", aadhaarNumber: "", panCard: ""
+    name: "", email: "", password: "", mobile: "", address: "", aadhaarNumber: "", panCard: "", age: ""
   });
   const [profilePhoto, setProfilePhoto] = useState<File | null>(null);
   const [aadhaarPhoto, setAadhaarPhoto] = useState<File | null>(null);
   const [panPhoto, setPanPhoto] = useState<File | null>(null);
+  const [pastExperiencePhoto, setPastExperiencePhoto] = useState<File | null>(null);
 
   // Admin Mark Attendance Form State
   const [attendanceForm, setAttendanceForm] = useState({
@@ -119,6 +120,21 @@ function AdminDashboard() {
 
   // Expandable student transaction histories
   const [expandedStudentId, setExpandedStudentId] = useState<string | null>(null);
+
+  // Search state for Transaction Registry
+  const [paymentSearchQuery, setPaymentSearchQuery] = useState("");
+  const [paymentSearchDate, setPaymentSearchDate] = useState("");
+  const [paymentSortField, setPaymentSortField] = useState<string | null>("Date");
+  const [paymentSortOrder, setPaymentSortOrder] = useState<"asc" | "desc">("desc");
+
+  const handlePaymentSort = (field: string) => {
+    if (paymentSortField === field) {
+      setPaymentSortOrder(paymentSortOrder === "asc" ? "desc" : "asc");
+    } else {
+      setPaymentSortField(field);
+      setPaymentSortOrder("asc");
+    }
+  };
 
   // Authenticate Admin & Fetch configurations
   useEffect(() => {
@@ -436,16 +452,18 @@ function AdminDashboard() {
       data.append("profilePhoto", profilePhoto);
       data.append("aadhaarPhoto", aadhaarPhoto);
       if (panPhoto) data.append("panPhoto", panPhoto);
+      if (pastExperiencePhoto) data.append("pastExperiencePhoto", pastExperiencePhoto);
 
       await api.post("/api/admin/employees", data, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
       toast.success("Employee added successfully!");
-      setEmpForm({ name: "", email: "", password: "", mobile: "", address: "", aadhaarNumber: "", panCard: "" });
+      setEmpForm({ name: "", email: "", password: "", mobile: "", address: "", aadhaarNumber: "", panCard: "", age: "" });
       setProfilePhoto(null);
       setAadhaarPhoto(null);
       setPanPhoto(null);
+      setPastExperiencePhoto(null);
     } catch (err: any) {
       console.error(err);
       toast.error(err.response?.data?.message || "Failed to add employee.");
@@ -1172,6 +1190,25 @@ function AdminDashboard() {
                       className="w-full text-xs text-slate-500 dark:text-slate-400 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-100 dark:bg-slate-800 file:text-slate-800 dark:text-slate-200 file:cursor-pointer"
                     />
                   </div>
+
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Age (Optional)</label>
+                    <input
+                      type="number" name="age"
+                      value={empForm.age} onChange={(e) => setEmpForm({ ...empForm, age: e.target.value })}
+                      placeholder="Age"
+                      className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 focus:border-amber-500 rounded-lg text-slate-900 dark:text-white outline-none text-xs"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Past Experience Upload (Optional)</label>
+                    <input
+                      type="file" accept="application/pdf,image/*"
+                      onChange={(e) => { if (e.target.files) setPastExperiencePhoto(e.target.files[0]); }}
+                      className="w-full text-xs text-slate-500 dark:text-slate-400 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-100 dark:bg-slate-800 file:text-slate-800 dark:text-slate-200 file:cursor-pointer"
+                    />
+                  </div>
                 </div>
 
                 <button
@@ -1220,7 +1257,7 @@ function AdminDashboard() {
                       type="text"
                       value={studentId}
                       onChange={(e) => setStudentId(e.target.value)}
-                      placeholder="Student UUID"
+                      placeholder="Student ID"
                       className="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 focus:border-amber-500 rounded-lg text-slate-900 dark:text-white outline-none text-xs"
                     />
                   </div>
@@ -1304,25 +1341,108 @@ function AdminDashboard() {
 
                 {/* Payments Table */}
                 <div className="lg:col-span-2 bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-lg p-5 overflow-x-auto">
-                  <h3 className="font-bold text-xs text-slate-800 dark:text-slate-200 mb-3">Transaction Registry</h3>
-                  {payments.length === 0 ? (
-                    <div className="text-center py-16 text-slate-500 dark:text-slate-500 text-xs">No payment logs recorded yet.</div>
-                  ) : (
-                    <table className="w-full text-[11px] text-left">
-                      <thead>
-                        <tr className="border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400">
-                          <th className="py-2.5">Receipt No.</th>
-                          <th className="py-2.5">Student</th>
-                          <th className="py-2.5">Amount</th>
-                          <th className="py-2.5">Method</th>
-                          <th className="py-2.5">Status</th>
-                          <th className="py-2.5">Date</th>
-                          <th className="py-2.5">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {payments.map((p: any) => (
-                          <tr key={p.id} className="border-b border-slate-850">
+                  <div className="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
+                    <h3 className="font-bold text-xs text-slate-800 dark:text-slate-200 whitespace-nowrap flex-shrink-0">Transaction Registry</h3>
+                    
+                    <div className="flex-grow w-full">
+                      <input
+                        type="text"
+                        placeholder="Search transactions..."
+                        value={paymentSearchQuery}
+                        onChange={(e) => setPaymentSearchQuery(e.target.value)}
+                        className="px-3 py-1.5 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 focus:border-amber-500 rounded-lg text-slate-900 dark:text-white outline-none text-[10px] w-full"
+                      />
+                    </div>
+
+                    <div className="flex-shrink-0 whitespace-nowrap">
+                      <input
+                        type="date"
+                        value={paymentSearchDate}
+                        onChange={(e) => setPaymentSearchDate(e.target.value)}
+                        className="px-3 py-1.5 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 focus:border-amber-500 rounded-lg text-slate-900 dark:text-white outline-none text-[10px] uppercase font-mono w-full md:w-auto"
+                      />
+                    </div>
+                  </div>
+                  {(() => {
+                    const filtered = payments.filter((p: any) => {
+                      const matchQuery = !paymentSearchQuery || 
+                        p.receiptNumber?.toLowerCase().includes(paymentSearchQuery.toLowerCase()) || 
+                        p.student?.name?.toLowerCase().includes(paymentSearchQuery.toLowerCase()) ||
+                        p.student?.email?.toLowerCase().includes(paymentSearchQuery.toLowerCase()) ||
+                        p.student?.id?.toLowerCase().includes(paymentSearchQuery.toLowerCase()) ||
+                        p.studentId?.toLowerCase().includes(paymentSearchQuery.toLowerCase());
+                      const matchDate = !paymentSearchDate || 
+                        (p.createdAt && new Date(p.createdAt).toISOString().split('T')[0] === paymentSearchDate);
+                      return matchQuery && matchDate;
+                    });
+
+                    const sorted = [...filtered].sort((a: any, b: any) => {
+                      if (!paymentSortField) return 0;
+                      let aVal = a[paymentSortField] || "";
+                      let bVal = b[paymentSortField] || "";
+                      
+                      if (paymentSortField === "Student") {
+                        aVal = a.student?.name || "";
+                        bVal = b.student?.name || "";
+                      } else if (paymentSortField === "Date") {
+                        aVal = new Date(a.createdAt).getTime();
+                        bVal = new Date(b.createdAt).getTime();
+                      } else if (paymentSortField === "Amount") {
+                        aVal = Number(a.amount) || 0;
+                        bVal = Number(b.amount) || 0;
+                      } else if (paymentSortField === "Receipt No.") {
+                        aVal = a.receiptNumber || "";
+                        bVal = b.receiptNumber || "";
+                      } else if (paymentSortField === "Method") {
+                        aVal = a.paymentMethod || "";
+                        bVal = b.paymentMethod || "";
+                      } else if (paymentSortField === "Status") {
+                        aVal = a.status || "";
+                        bVal = b.status || "";
+                      }
+
+                      if (aVal < bVal) return paymentSortOrder === "asc" ? -1 : 1;
+                      if (aVal > bVal) return paymentSortOrder === "asc" ? 1 : -1;
+                      return 0;
+                    });
+
+                    if (sorted.length === 0) {
+                      return <div className="text-center py-16 text-slate-500 dark:text-slate-500 text-xs">No payment logs found.</div>;
+                    }
+
+                    const SortIcon = ({ field }: { field: string }) => {
+                      if (paymentSortField !== field) return <ArrowUpDown className="w-3 h-3 text-slate-400 opacity-50 ml-1" />;
+                      return paymentSortOrder === "asc" ? <ArrowUp className="w-3 h-3 text-amber-500 ml-1" /> : <ArrowDown className="w-3 h-3 text-amber-500 ml-1" />;
+                    };
+
+                    return (
+                      <table className="w-full text-[11px] text-left">
+                        <thead>
+                          <tr className="border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 select-none">
+                            <th className="py-2.5 cursor-pointer hover:text-slate-700 dark:hover:text-slate-200 transition-colors" onClick={() => handlePaymentSort("Receipt No.")}>
+                              <div className="flex items-center">Receipt No. <SortIcon field="Receipt No." /></div>
+                            </th>
+                            <th className="py-2.5 cursor-pointer hover:text-slate-700 dark:hover:text-slate-200 transition-colors" onClick={() => handlePaymentSort("Student")}>
+                              <div className="flex items-center">Student <SortIcon field="Student" /></div>
+                            </th>
+                            <th className="py-2.5 cursor-pointer hover:text-slate-700 dark:hover:text-slate-200 transition-colors" onClick={() => handlePaymentSort("Amount")}>
+                              <div className="flex items-center">Amount <SortIcon field="Amount" /></div>
+                            </th>
+                            <th className="py-2.5 cursor-pointer hover:text-slate-700 dark:hover:text-slate-200 transition-colors" onClick={() => handlePaymentSort("Method")}>
+                              <div className="flex items-center">Method <SortIcon field="Method" /></div>
+                            </th>
+                            <th className="py-2.5 cursor-pointer hover:text-slate-700 dark:hover:text-slate-200 transition-colors" onClick={() => handlePaymentSort("Status")}>
+                              <div className="flex items-center">Status <SortIcon field="Status" /></div>
+                            </th>
+                            <th className="py-2.5 cursor-pointer hover:text-slate-700 dark:hover:text-slate-200 transition-colors" onClick={() => handlePaymentSort("Date")}>
+                              <div className="flex items-center">Date <SortIcon field="Date" /></div>
+                            </th>
+                            <th className="py-2.5">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {sorted.map((p: any) => (
+                            <tr key={p.id} className="border-b border-slate-850">
                             <td className="py-2.5 font-semibold text-slate-900 dark:text-white">{p.receiptNumber}</td>
                             <td className="py-2.5">
                               <p className="font-medium text-slate-800 dark:text-slate-200">{p.student?.name}</p>
@@ -1339,7 +1459,9 @@ function AdminDashboard() {
                                 {p.status}
                               </span>
                             </td>
-                            <td className="py-2.5 text-slate-500 dark:text-slate-400">{new Date(p.createdAt).toLocaleDateString()}</td>
+                            <td className="py-2.5 text-slate-500 dark:text-slate-400 font-mono text-[10px]">
+                              {`${String(new Date(p.createdAt).getDate()).padStart(2, '0')}-${String(new Date(p.createdAt).getMonth() + 1).padStart(2, '0')}-${new Date(p.createdAt).getFullYear()}`}
+                            </td>
                             <td className="py-2.5 flex items-center gap-2">
                               {p.status === "PENDING" ? (
                                 <>
@@ -1369,8 +1491,9 @@ function AdminDashboard() {
                           </tr>
                         ))}
                       </tbody>
-                    </table>
-                  )}
+                      </table>
+                    );
+                  })()}
                 </div>
               </div>
             </div>

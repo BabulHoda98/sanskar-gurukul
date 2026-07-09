@@ -41,7 +41,8 @@ export const upload = multer({
 export const registrationUpload = upload.fields([
   { name: 'profilePhoto', maxCount: 1 },
   { name: 'aadhaarPhoto', maxCount: 1 },
-  { name: 'panPhoto', maxCount: 1 }
+  { name: 'panPhoto', maxCount: 1 },
+  { name: 'pastExperiencePhoto', maxCount: 1 }
 ]);
 
 export const studentUpload = upload.fields([

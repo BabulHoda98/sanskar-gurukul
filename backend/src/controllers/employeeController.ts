@@ -160,7 +160,7 @@ export const getOwnAttendance = async (req: AuthenticatedRequest, res: Response)
 // 6. Add another Employee (e.g. registered by an Admin or existing Employee)
 export const addEmployee = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
-    const { name, email, password, mobile, address, aadhaarNumber, panCard } = req.body;
+    const { name, email, password, mobile, address, aadhaarNumber, panCard, age } = req.body;
     const files = req.files as { [fieldname: string]: Express.Multer.File[] } | undefined;
 
     if (!name || !email || !password || !mobile || !address || !aadhaarNumber) {
@@ -188,6 +188,7 @@ export const addEmployee = async (req: AuthenticatedRequest, res: Response): Pro
     const profilePhoto = '/uploads/' + files['profilePhoto'][0].filename;
     const aadhaarPhoto = '/uploads/' + files['aadhaarPhoto'][0].filename;
     const panPhoto = files['panPhoto'] ? '/uploads/' + files['panPhoto'][0].filename : null;
+    const pastExperiencePhoto = files['pastExperiencePhoto'] ? '/uploads/' + files['pastExperiencePhoto'][0].filename : null;
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -199,10 +200,12 @@ export const addEmployee = async (req: AuthenticatedRequest, res: Response): Pro
         mobile,
         address,
         aadhaarNumber,
-        aadhaarPhoto,
-        profilePhoto,
         panCard: panCard || null,
+        age,
+        profilePhoto,
+        aadhaarPhoto,
         panPhoto: panPhoto,
+        pastExperiencePhoto,
         role: 'EMPLOYEE'
       }
     });

@@ -32,11 +32,12 @@ function EmployeeDashboard() {
 
   // Add Employee Form State
   const [empForm, setEmpForm] = useState({
-    name: "", email: "", password: "", mobile: "", address: "", aadhaarNumber: "", panCard: ""
+    name: "", email: "", password: "", mobile: "", address: "", aadhaarNumber: "", panCard: "", age: ""
   });
   const [profilePhoto, setProfilePhoto] = useState<File | null>(null);
   const [aadhaarPhoto, setAadhaarPhoto] = useState<File | null>(null);
   const [panPhoto, setPanPhoto] = useState<File | null>(null);
+  const [pastExperiencePhoto, setPastExperiencePhoto] = useState<File | null>(null);
 
   // QR and Payments State
   const [studentId, setStudentId] = useState("");
@@ -180,16 +181,18 @@ function EmployeeDashboard() {
       data.append("profilePhoto", profilePhoto);
       data.append("aadhaarPhoto", aadhaarPhoto);
       if (panPhoto) data.append("panPhoto", panPhoto);
+      if (pastExperiencePhoto) data.append("pastExperiencePhoto", pastExperiencePhoto);
 
       await api.post("/api/employee/add-employee", data, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
       toast.success("Employee added successfully!");
-      setEmpForm({ name: "", email: "", password: "", mobile: "", address: "", aadhaarNumber: "", panCard: "" });
+      setEmpForm({ name: "", email: "", password: "", mobile: "", address: "", aadhaarNumber: "", panCard: "", age: "" });
       setProfilePhoto(null);
       setAadhaarPhoto(null);
       setPanPhoto(null);
+      setPastExperiencePhoto(null);
     } catch (err: any) {
       console.error(err);
       toast.error(err.response?.data?.message || "Failed to add employee.");
@@ -478,7 +481,7 @@ function EmployeeDashboard() {
                         type="text"
                         value={studentId}
                         onChange={(e) => setStudentId(e.target.value)}
-                        placeholder="Enter student UUID"
+                        placeholder="Student ID"
                         className="w-full px-4 py-2.5 bg-slate-950/50 border border-slate-800 focus:border-blue-500 rounded-xl text-white outline-none text-xs"
                       />
                     </div>
@@ -856,6 +859,24 @@ function EmployeeDashboard() {
                     <input
                       type="file" accept="image/*"
                       onChange={(e) => { if (e.target.files) setPanPhoto(e.target.files[0]); }}
+                      className="w-full text-xs text-slate-400 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-slate-800 file:text-slate-200 file:cursor-pointer"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Age (Optional)</label>
+                    <input
+                      type="number" name="age"
+                      value={empForm.age} onChange={(e) => setEmpForm({ ...empForm, age: e.target.value })}
+                      placeholder="Age"
+                      className="w-full px-4 py-2.5 bg-slate-950/50 border border-slate-800 focus:border-blue-500 rounded-xl text-white outline-none text-xs"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Past Experience Upload (Optional)</label>
+                    <input
+                      type="file" accept="application/pdf,image/*"
+                      onChange={(e) => { if (e.target.files) setPastExperiencePhoto(e.target.files[0]); }}
                       className="w-full text-xs text-slate-400 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-slate-800 file:text-slate-200 file:cursor-pointer"
                     />
                   </div>
